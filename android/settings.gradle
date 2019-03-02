@@ -1,0 +1,3 @@
+rootProject.name = 'ReactNativeSvgE2E'
+
+include ':app'
