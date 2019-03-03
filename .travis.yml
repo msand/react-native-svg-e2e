@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode9
+osx_image: xcode9.1
 
 branches:
   only:
@@ -22,8 +22,8 @@ install:
 - npm install
 
 before_script:
-- travis_wait npm run test:e2e:build:ios:release
-- fbsimctl shutdown
+- npm run test:e2e:build:ios:release
+- simctl shutdown
 
 script:
 - npm run test:e2e:ios:release
