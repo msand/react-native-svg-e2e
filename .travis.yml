@@ -2,11 +2,11 @@ aliases:
   - &android
     components:
       - build-tools-26.0.2
-      - android-24
+      - android-21
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-x86-google_apis-22
+      - sys-img-x86-android-21
 
   - &android-cache
     directories:
@@ -54,11 +54,11 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-22;google_apis;x86"
+        - sdkmanager "system-images;android-21;google_apis;x86"
 
       before_script:
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-22;google_apis;x86"
-        - emulator -avd test -no-audio -no-window &
+        - echo no | android create avd --force -n test -t android-21 --abi x86
+        - emulator -avd test -memory 1500 -no-accel -gpu swiftshader -skin 720x1280 -camera-back none -camera-front none -no-boot-anim -no-window &
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
       script:
