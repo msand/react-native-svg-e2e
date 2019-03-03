@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "npm run test:e2e:build:ios:release && npm run test:e2e:ios:release",
+    "build:ios": "scripts/build-ios.sh",
     "test:e2e:ios": "detox test -c ios.sim.debug",
     "test:e2e:ios:release": "detox test -c ios.sim.release --cleanup",
     "test:e2e:build:ios": "detox build -c ios.sim.debug",
@@ -40,7 +41,7 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build | xcpretty",
+        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build | xcpretty -c -f `xcpretty-travis-formatter`",
         "type": "ios.simulator",
         "name": "iPhone 7"
       },
