@@ -29,7 +29,7 @@ aliases:
       yarn global add react-native-cli
       react-native init App --version="0.58.6"
       cd App
-      yarn add react-native-svg@next
+      yarn add react-native-svg
 
 jobs:
   include:
@@ -127,6 +127,7 @@ jobs:
         - brew install yarn
         - *init-new-project
         - react-native link
+        - cd ios
         - xcodebuild -project App.xcodeproj -configuration Debug -scheme App -sdk iphonesimulator -quiet
 
     - stage: "build test for new project with pods"
