@@ -21,7 +21,7 @@ aliases:
   - &init-new-project
     |
       nvm install node
-      nvm alias node
+      nvm alias default node
       yarn global add react-native-cli
       react-native init App --version="0.58.6"
       cd App
@@ -60,7 +60,7 @@ jobs:
       before_install:
       script:
         - nvm install node
-        - nvm alias node
+        - nvm alias default node
         - brew tap wix/brew
         - brew install yarn
         - brew install applesimutils
