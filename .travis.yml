@@ -58,7 +58,7 @@ jobs:
         # Install the system image
         - sdkmanager "system-images;android-25;google_apis;armeabi-v7a"
         # Create and start emulator for the script. Meant to race the install task.
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-25;google_apis;armeabi-v7a"
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-25;google_apis;armeabi-v7a" --skin WVGA800
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
       script:
         - nvm install node
@@ -68,6 +68,7 @@ jobs:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
+        - cat /home/travis/.android/avd/test.avd/config.ini
         - detox test --configuration android.emu.release --cleanup --take-screenshots all
         - ls -lh app/build/outputs/apk
 
