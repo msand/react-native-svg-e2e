@@ -40,9 +40,9 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone XR' -derivedDataPath ios/build",
+        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone Xʀ"
+        "name": "iPhone 7"
       },
       "android.emu.debug": {
         "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
