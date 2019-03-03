@@ -6,7 +6,7 @@ aliases:
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-x86-google_apis-24
+      - sys-img-x86-google_apis-22
 
   - &android-cache
     directories:
@@ -55,17 +55,17 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-24;google_apis;x86"
+      before_script:
+        - echo no | android create avd --force -n test -t android-22 --abi x86 -c 512M
+        - emulator -avd test -no-audio -no-window &
+        - android-wait-for-emulator
+        - adb shell input keyevent 82 &
       script:
-        # Create and start emulator for the script. Meant to race the install task.
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-24;google_apis;x86"
-        - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
         - nvm install node
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.release
-        - android-wait-for-emulator
-        - adb shell input keyevent 82 &
         - cat /home/travis/.android/avd/test.avd/config.ini
         - detox test --configuration android.emu.release --cleanup --take-screenshots all
         - ls -lh app/build/outputs/apk
