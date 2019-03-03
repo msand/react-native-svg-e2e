@@ -2,7 +2,7 @@ aliases:
   - &android
     components:
       - build-tools-26.0.2
-      - android-21
+      - android-28
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
@@ -58,6 +58,10 @@ jobs:
 
       before_script:
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
+        - cd $ANDROID_HOME/emulator/lib64/libstdc++
+        - mv libstdc++.so.6 libstdc++.so.6.bak
+        - ln -s /usr/lib64/libstdc++.so.6 $ANDROID_HOME/emulator/lib64/libstdc++
+        - cd $ANDROID_HOME/emulator
         - emulator -avd test -skin 240x426 -camera-back none -camera-front none -no-boot-anim -no-window &
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
