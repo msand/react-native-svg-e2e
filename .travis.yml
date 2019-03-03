@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode10.1
+osx_image: xcode8.3
 
 branches:
   only:
@@ -12,7 +12,7 @@ env:
 install:
 - brew tap wix/brew
 - brew install applesimutils
-- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 - export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 - nvm install $NODE_VERSION
 - nvm use $NODE_VERSION
