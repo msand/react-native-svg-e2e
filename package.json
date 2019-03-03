@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
+    "test": "npm run test:e2e:build:ios:release && npm run test:e2e:ios:release",
     "test:e2e:ios": "detox test -c ios.sim.debug",
+    "test:e2e:ios:release": "detox test -c ios.sim.release --cleanup",
     "test:e2e:build:ios": "detox build -c ios.sim.debug",
+    "test:e2e:build:ios:release": "detox build -c ios.sim.release",
     "test:e2e:android": "detox test -c android.emu.debug",
     "test:e2e:build:android": "detox build -c android.emu.debug",
     "screenshots:ios": "detox test -c ios.sim.debug --take-screenshots all",
