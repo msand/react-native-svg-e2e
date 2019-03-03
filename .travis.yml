@@ -21,5 +21,9 @@ install:
 - npm install -g detox-cli
 - npm install
 
+before_script:
+- travis_wait npm run test:e2e:build:ios:release
+- fbsimctl shutdown
+
 script:
-- npm run test
+- npm run test:e2e:ios:release
