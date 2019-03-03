@@ -13,11 +13,23 @@
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "24.1.0",
-    "jest": "24.1.0",
+    "detox": "^10.0.10",
+    "jest": "^24.1.0",
     "metro-react-native-babel-preset": "0.53.0",
     "react-test-renderer": "16.6.3"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/ReactNativeSvgE2E.app",
+        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone Xʀ"
+      }
+    },
+    "test-runner": "jest"
   }
 }

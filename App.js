@@ -7,8 +7,14 @@
  * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -19,12 +25,29 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+  state = {};
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
+        <Text style={styles.welcome} testID="welcome">
+          Welcome to React Native!
+        </Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        <TouchableOpacity
+          testID="hello_button"
+          onPress={() => this.setState({ hello: true })}
+        >
+          <Text style={styles.button}>Hello</Text>
+        </TouchableOpacity>
+        {this.state.hello ? <Text>Hello!!!</Text> : null}
+        <TouchableOpacity
+          testID="world_button"
+          onPress={() => this.setState({ world: true })}
+        >
+          <Text style={styles.button}>World</Text>
+        </TouchableOpacity>
+        {this.state.world ? <Text>World!!!</Text> : null}
       </View>
     );
   }
