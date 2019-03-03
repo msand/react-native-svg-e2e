@@ -8,7 +8,9 @@
     "test:e2e:ios": "detox test -c ios.sim.debug",
     "test:e2e:build:ios": "detox build -c ios.sim.debug",
     "test:e2e:android": "detox test -c android.emu.debug",
-    "test:e2e:build:android": "detox build -c android.emu.debug"
+    "test:e2e:build:android": "detox build -c android.emu.debug",
+    "screenshots:ios": "detox test -c ios.sim.debug --take-screenshots all",
+    "screenshots:android": "detox test -c android.emu.debug --take-screenshots all"
   },
   "dependencies": {
     "react": "16.6.3",

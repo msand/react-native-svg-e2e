@@ -15,6 +15,10 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import {
+  Svg,
+  Rect
+} from 'react-native-svg';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -34,6 +38,9 @@ export default class App extends Component<Props> {
         </Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        <Svg width="100" height="100" viewBox="0 0 100 100">
+          <Rect fill="black" width="100" height="100" />
+        </Svg>
         <TouchableOpacity
           testID="hello_button"
           onPress={() => this.setState({ hello: true })}
