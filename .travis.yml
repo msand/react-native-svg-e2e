@@ -2,11 +2,11 @@ aliases:
   - &android
     components:
       - build-tools-26.0.2
-      - android-26
+      - android-24
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-x86-google_apis-26
+      - sys-img-x86-google_apis-24
 
   - &android-cache
     directories:
@@ -54,9 +54,9 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-26;google_apis;x86"
+        - sdkmanager "system-images;android-24;google_apis;x86"
         # Create and start emulator for the script. Meant to race the install task.
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-26;google_apis;x86"
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-24;google_apis;x86"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
       script:
         - nvm install node
