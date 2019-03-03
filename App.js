@@ -9,72 +9,109 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
-  StyleSheet,
   Text,
   View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {
-  Svg,
-  Rect
-} from 'react-native-svg';
+import * as src from './src';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const tests = Object.keys(src).map(key => ({ key }));
 
-type Props = {};
-export default class App extends Component<Props> {
-  state = {};
+class TestItem extends React.PureComponent {
   render() {
+    const { test } = this.props;
+    const Test = src[test];
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome} testID="welcome">
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <Svg width="100" height="100" viewBox="0 0 100 100">
-          <Rect fill="black" width="100" height="100" />
-        </Svg>
-        <TouchableOpacity
-          testID="hello_button"
-          onPress={() => this.setState({ hello: true })}
-        >
-          <Text style={styles.button}>Hello</Text>
-        </TouchableOpacity>
-        {this.state.hello ? <Text>Hello!!!</Text> : null}
-        <TouchableOpacity
-          testID="world_button"
-          onPress={() => this.setState({ world: true })}
-        >
-          <Text style={styles.button}>World</Text>
-        </TouchableOpacity>
-        {this.state.world ? <Text>World!!!</Text> : null}
+      <View style={styles.flatTest} testID={test + 'View'}>
+        <Test width="100%" height="100%" />
       </View>
     );
   }
 }
 
+class ListItem extends React.PureComponent {
+  onPress = () => {
+    const { onPress, test } = this.props;
+    onPress(test);
+  };
+  render() {
+    const { test } = this.props;
+    return (
+      <TouchableOpacity testID={test} onPress={this.onPress}>
+        <Text>{test}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
+
+const ALL = Symbol('ALL');
+
+const toggleAll = ({ test }) => ({ test: test === null ? ALL : null });
+
+export default class App extends Component {
+  state = {
+    test: null,
+  };
+  onAll = () => this.setState(toggleAll);
+  onTest = test => this.setState({ test });
+  renderTest = ({ item }) => <TestItem test={item.key} />;
+  renderItem = ({ item }) => <ListItem test={item.key} onPress={this.onTest} />;
+  render() {
+    const { test } = this.state;
+    const Test = test && src[test];
+    return (
+      <View style={styles.container} testID="container">
+        <TouchableOpacity style={styles.button} onPress={this.onAll}>
+          <Text>{test === null ? 'All' : 'Back'}</Text>
+        </TouchableOpacity>
+        {Test ? (
+          <View style={styles.test} testID={test + 'View'}>
+            <Test width="100%" height="100%" />
+          </View>
+        ) : (
+          <FlatList
+            data={tests}
+            extraData={test}
+            renderItem={test === ALL ? this.renderTest : this.renderItem}
+          />
+        )}
+      </View>
+    );
+  }
+}
+
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 40,
+    paddingBottom: 40,
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  test: {
+    padding: 5,
+    width: '98%',
+    height: '50%',
+    borderWidth: 1,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
+  flatTest: {
+    padding: 5,
+    borderWidth: 1,
     marginBottom: 5,
+    width: width * 0.98,
+    height: width * 0.98,
+  },
+  button: {
+    width: 50,
+    height: 40,
+    borderWidth: 1,
+    marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
