@@ -40,7 +40,7 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build | xcpretty",
+        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build | xcpretty",
         "type": "ios.simulator",
         "name": "iPhone 7"
       },
