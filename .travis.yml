@@ -7,6 +7,8 @@ aliases:
       - extra-android-m2repository
       - extra-android-support
       - sys-img-x86-android-28
+      - sys-img-armeabi-v7a-android-18
+      - sys-img-armeabi-v7a-android-28
 
   - &android-cache
     directories:
@@ -56,7 +58,7 @@ jobs:
         # Install the system image
         - sdkmanager "system-images;android-18;default;armeabi-v7a"
         # Create and start emulator for the script. Meant to race the install task.
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-28;default;armeabi-v7a"
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-18;default;armeabi-v7a"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
       before_script:
         - android-wait-for-emulator
@@ -105,7 +107,7 @@ jobs:
         # Install the system image
         - sdkmanager "system-images;android-18;default;armeabi-v7a"
         # Create and start emulator for the script. Meant to race the install task.
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-28;default;armeabi-v7a"
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-18;default;armeabi-v7a"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
       before_script:
         - android-wait-for-emulator
