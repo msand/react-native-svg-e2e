@@ -1,30 +1,139 @@
-language: objective-c
-osx_image: xcode9.1
+aliases:
+- &android
+  components:
+  - build-tools-28.0.3
+  - android-28
+  - extra-android-m2repository
+  - extra-android-support
 
-branches:
-  only:
-  - master
+- &android-cache
+  directories:
+  - ~/.cache/yarn
+  - ~/.gradle/caches/modules-2
+  - ~/.gradle/wrapper
 
-env:
-  global:
-  - NODE_VERSION=stable
+- &ios-cache
+  directories:
+  - ~/.rncache
+  - ~/Library/Caches/Yarn
+  - ~/Library/Caches/CocoaPods
 
-install:
-- brew tap wix/brew
-- brew install applesimutils
-- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-- export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-- nvm install $NODE_VERSION
-- nvm use $NODE_VERSION
-- nvm alias default $NODE_VERSION
+- &init-new-project
+    |
+    nvm install node
+    yarn global add react-native-cli
+    react-native init App --version="0.58.6"
+    cd App
+    yarn add react-native-svg@next
 
-- npm install -g react-native-cli
-- npm install -g detox-cli
-- npm install
+jobs:
+  include:
+  - stage: "test js"
+    language: node_js
+    node_js : node
+    cache: yarn
+    script:
+    - node node_modules/react-native/local-cli/cli.js bundle --entry-file index.js --bundle-output bundle.js
+    - ls -lh bundle.*
 
-before_script:
-- detox build --configuration ios.sim.release
-- xcrun simctl shutdown all
+  - stage: "build test for example"
+    language: android
+    jdk: oraclejdk8
+    android: *android
+    before_cache:
+    - rm ~/.gradle/caches/modules-2/modules-2.lock
+    cache : * android-cache
+    script:
+    - nvm install node
+    - yarn global add react-native-cli
+    - yarn global add detox-cli
+    - yarn
+    - detox build --configuration android.emu.release
+    - detox test --configuration android.emu.release --cleanup --take-screenshots all
+    - ls -lh app/build/outputs/apk
 
-script:
-- detox test --configuration ios.sim.release --cleanup
+  - stage: "build test for example"
+    language: objective-c
+    osx_image: xcode10.1
+    cache : * ios-cache
+    before_install:
+    script:
+    - nvm install node
+    - brew tap wix/brew
+    - brew install yarn
+    - brew install applesimutils
+    - yarn global add react-native-cli
+    - yarn global add detox-cli
+    - yarn
+    - detox build --configuration ios.sim.release
+    - xcrun simctl shutdown all
+    - detox test --configuration ios.sim.release --cleanup --take-screenshots all
+
+  - stage: "build test for new project"
+    language: android
+    jdk: oraclejdk8
+    android: *android
+    before_cache:
+    - rm ~/.gradle/caches/modules-2/modules-2.lock
+    cache : * android-cache
+    script:
+    - *init-new-project
+    - react-native link
+    - cd android
+    - ./gradlew build
+    - ls -lh app/build/outputs/apk
+
+  - stage: "build test for new project"
+    language: objective-c
+    osx_image: xcode10.1
+    cache : * ios-cache
+    script:
+    - brew install yarn
+    - *init-new-project
+    - react-native link
+    - xcodebuild -project App.xcodeproj -configuration Debug -scheme App -sdk iphonesimulator -quiet
+
+  - stage: "build test for new project with pods"
+    language: objective-c
+    osx_image: xcode10.1
+    cache : * ios-cache
+    script:
+    - brew install yarn
+    - *init-new-project
+    - cd ios
+    - |
+      cat << EOF > Podfile
+        platform :ios, '9.0'
+        target 'App' do
+          # Your 'node_modules' directory is probably in the root of your project,
+          # but if not, adjust the `:path` accordingly
+          pod 'React', :path => '../node_modules/react-native', :subspecs => [
+            'Core',
+            'CxxBridge', # Include this for RN >= 0.47
+            'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
+            'RCTText',
+            'RCTImage',
+            'RCTNetwork',
+            'RCTWebSocket', # Needed for debugging
+            'RCTAnimation', # Needed for FlatList and animations running on native UI thread
+            # Add any other subspecs you want to use in your project
+          ]
+          # Explicitly include Yoga if you are using RN >= 0.42.0
+          pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+          # Third party deps podspec link
+          pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+          pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+          pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+          pod 'RNSVG', :path => '../node_modules/react-native-svg'
+        end
+      EOF
+    - pod install --repo-update
+    - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
+
+stages:
+- "test js"
+- "build test for example"
+- "build test for new project"
+- "build test for new project with pods"

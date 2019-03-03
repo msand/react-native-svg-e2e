@@ -4,16 +4,19 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "npm run test:e2e:build:ios:release && npm run test:e2e:ios:release",
-    "build:ios": "scripts/build-ios.sh",
-    "test:e2e:ios": "detox test -c ios.sim.debug",
-    "test:e2e:ios:release": "detox test -c ios.sim.release --cleanup",
+    "test": "jest",
     "test:e2e:build:ios": "detox build -c ios.sim.debug",
-    "test:e2e:build:ios:release": "detox build -c ios.sim.release",
-    "test:e2e:android": "detox test -c android.emu.debug",
     "test:e2e:build:android": "detox build -c android.emu.debug",
+    "test:e2e:build:ios:release": "detox build -c ios.sim.release",
+    "test:e2e:build:android:release": "detox build -c android.emu.release",
+    "test:e2e:ios": "detox test -c ios.sim.debug",
+    "test:e2e:android": "detox test -c android.emu.debug",
+    "test:e2e:ios:release": "detox test -c ios.sim.release --cleanup",
+    "test:e2e:android:release": "detox test -c android.emu.release",
     "screenshots:ios": "detox test -c ios.sim.debug --take-screenshots all",
-    "screenshots:android": "detox test -c android.emu.debug --take-screenshots all"
+    "screenshots:android": "detox test -c android.emu.debug --take-screenshots all",
+    "screenshots:ios:release": "detox test -c ios.sim.release --take-screenshots all",
+    "screenshots:android:release": "detox test -c android.emu.release --take-screenshots all"
   },
   "dependencies": {
     "react": "16.6.3",
@@ -48,6 +51,12 @@
       "android.emu.debug": {
         "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
         "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_5X_API_28_x86"
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "pushd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && popd",
         "type": "android.emulator",
         "name": "Nexus_5X_API_28_x86"
       }
