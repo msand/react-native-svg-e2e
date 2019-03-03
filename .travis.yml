@@ -22,9 +22,8 @@ install:
 - npm install
 
 before_script:
-- npm run build:ios
-- npm run test:e2e:build:ios:release
+- detox build --configuration ios.sim.release
 - simctl shutdown
 
 script:
-- npm run test:e2e:ios:release
+- detox test --configuration ios.sim.release --cleanup
