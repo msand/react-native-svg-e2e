@@ -96,7 +96,7 @@ jobs:
     - stage: "build test for new project with pods"
       language: objective-c
       osx_image: xcode10.1
-      cache : * ios-cache
+      cache: *ios-cache
       script:
         - brew install yarn
         - *init-new-project
