@@ -24,7 +24,7 @@ install:
 
 before_script:
 - detox build --configuration ios.sim.release
-- simctl shutdown
+- xcrun simctl shutdown
 
 script:
 - detox test --configuration ios.sim.release --cleanup
