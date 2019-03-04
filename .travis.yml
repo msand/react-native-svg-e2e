@@ -73,7 +73,7 @@ jobs:
         #- echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - cd $ANDROID_HOME/emulator
         - avdmanager list avd
-        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 -gpu swiftshader_indirect -verbose -debug all &
+        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 -gpu swiftshader_indirect &
         - cd -
       script:
         - nvm install node
@@ -89,7 +89,7 @@ jobs:
         - adb reverse tcp:8099 tcp:8099
         - sleep 20
         - adb -s emulator-5554 shell "dumpsys power"
-        - adb logcat -d
+        #- adb logcat -d
         - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
         - ls -lh app/build/outputs/apk
 
