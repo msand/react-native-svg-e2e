@@ -90,6 +90,7 @@ jobs:
         - sleep 20
         - adb -s emulator-5554 shell "dumpsys power"
         #- adb logcat -d
+        - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk
         - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
         - ls -lh app/build/outputs/apk
 
