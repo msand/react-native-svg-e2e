@@ -66,7 +66,7 @@ jobs:
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
         - cd $ANDROID_HOME/emulator
         - avdmanager list
-        - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
+        #- emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       script:
         - nvm install node
@@ -77,7 +77,7 @@ jobs:
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/test.avd/config.ini
         - cat /home/travis/.android/avd/test.avd/config.ini
-        - android-wait-for-emulator
+        #- android-wait-for-emulator
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - detox test --configuration android.emu.release --cleanup
