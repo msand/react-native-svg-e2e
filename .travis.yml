@@ -84,6 +84,7 @@ jobs:
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
+        - sleep 20
         - adb -s emulator-5554 shell "dumpsys power"
         - adb logcat -d
         - detox test --configuration android.emu.debug --cleanup --headless --loglevel verbose
