@@ -92,7 +92,7 @@ jobs:
         #- adb logcat -d
         - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk &
         - sleep 10
-        - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
+        - detox test --configuration android.emu.debug --cleanup --headless --reuse --loglevel trace
         - ls -lh app/build/outputs/apk
 
     - stage: "build test for example"
