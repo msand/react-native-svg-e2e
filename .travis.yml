@@ -91,28 +91,29 @@ jobs:
         - adb -s emulator-5554 shell "dumpsys power"
         #- adb logcat -d
         - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk &
+        - sleep 5
         - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk &
         - sleep 30
         - detox test --configuration android.emu.debug --cleanup --headless --reuse --loglevel trace
         - ls -lh app/build/outputs/apk
 
-    - stage: "build test for example"
-      language: objective-c
-      osx_image: xcode10.1
-      cache: *ios-cache
-      before_install:
-      script:
-        - nvm install node
-        - nvm alias default node
-        - brew tap wix/brew
-        - brew install yarn
-        - brew install applesimutils
-        - yarn global add react-native-cli
-        - yarn global add detox-cli
-        - yarn
-        - detox build --configuration ios.sim.release
-        - xcrun simctl shutdown all
-        - detox test --configuration ios.sim.release --cleanup --take-screenshots all
+#    - stage: "build test for example"
+#      language: objective-c
+#      osx_image: xcode10.1
+#      cache: *ios-cache
+#      before_install:
+#      script:
+#        - nvm install node
+#        - nvm alias default node
+#        - brew tap wix/brew
+#        - brew install yarn
+#        - brew install applesimutils
+#        - yarn global add react-native-cli
+#        - yarn global add detox-cli
+#        - yarn
+#        - detox build --configuration ios.sim.release
+#        - xcrun simctl shutdown all
+#        - detox test --configuration ios.sim.release --cleanup --take-screenshots all
 
     - stage: "build test for new project"
       language: android
@@ -179,7 +180,7 @@ jobs:
         - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
 
 stages:
-  - "test js"
+#  - "test js"
   - "build test for example"
-  - "build test for new project"
-  - "build test for new project with pods"
+#  - "build test for new project"
+#  - "build test for new project with pods"
