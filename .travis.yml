@@ -64,7 +64,7 @@ jobs:
         - mksdcard -l sdcard 200M /home/travis/.android/avd/emulator-5554.avd/sdcard.img
         - cd -
         - avdmanager list
-        - echo no | android create avd --force -n emulator-5554 -t android-25 --abi armeabi-v7a -c -c 200M
+        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-25;google_apis;armeabi-v7a" -c 200M
         - echo "hw.sdcard=yes" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "sdcard.path=/home/travis/.android/avd/emulator-5554.avd/sdcard.img" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
