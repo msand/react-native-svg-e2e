@@ -47,7 +47,7 @@ class ListItem extends React.PureComponent {
   }
 }
 
-const ALL = Symbol('ALL');
+const ALL = {};
 
 const toggleAll = ({ test }) => ({ test: test === null ? ALL : null });
 
