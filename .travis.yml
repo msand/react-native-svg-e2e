@@ -56,10 +56,11 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
+        - mkdir /home/travis/.android/avd/test.avd
         - cd $ANDROID_HOME
         - mksdcard -l sdcard 200M /home/travis/.android/avd/test.avd/sdcard.img
         - cd -
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a" -c /home/travis/.android/avd/test.avd/sdcard.img
         - echo "hw.sdcard=yes" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.path=/home/travis/.android/avd/test.avd/sdcard.img" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
