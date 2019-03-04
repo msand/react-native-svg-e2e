@@ -3,6 +3,7 @@ aliases:
     components:
       - build-tools-26.0.2
       - android-28
+      - android-21
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
@@ -57,7 +58,7 @@ jobs:
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
         - cd $ANDROID_HOME/emulator
-        - android list targets
+        - android list target
         - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window &
         - cd -
       script:
