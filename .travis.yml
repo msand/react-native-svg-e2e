@@ -56,10 +56,10 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a" -c 100
         - cd $ANDROID_HOME/emulator
         - android list target
-        - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window &
+        - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       script:
         - nvm install node
@@ -67,7 +67,8 @@ jobs:
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.release
-        - echo "skin.name=nexus_5" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/test.avd/config.ini
         - cat /home/travis/.android/avd/test.avd/config.ini
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
