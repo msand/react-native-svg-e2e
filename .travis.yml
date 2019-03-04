@@ -56,7 +56,7 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a" -c 100
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
         - cd $ANDROID_HOME/emulator
         - android list target
         - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
