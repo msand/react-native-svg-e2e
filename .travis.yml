@@ -58,7 +58,7 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-25;google_apis;armeabi-v7a"
+        - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - mkdir /home/travis/.android/avd/emulator-5554.avd
         - cd $ANDROID_HOME
         - rm -rf $ANDROID_HOME/emulator
@@ -90,7 +90,8 @@ jobs:
         - sleep 20
         - adb -s emulator-5554 shell "dumpsys power"
         #- adb logcat -d
-        - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk
+        - adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk &
+        - sleep 10
         - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
         - ls -lh app/build/outputs/apk
 
