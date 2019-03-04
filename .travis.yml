@@ -57,7 +57,7 @@ jobs:
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
         - cd $ANDROID_HOME/emulator
-        - emulator -avd test -skin 240x426 -camera-back none -camera-front none -no-boot-anim -no-window &
+        - emulator -avd test -skin WVGA800 -camera-back none -camera-front none -no-boot-anim -no-window &
         - cd -
       script:
         - nvm install node
@@ -65,7 +65,7 @@ jobs:
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.release
-        - echo "skin.name=1" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo "skin.name=WVGA800" >> /home/travis/.android/avd/test.avd/config.ini
         - cat /home/travis/.android/avd/test.avd/config.ini
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
