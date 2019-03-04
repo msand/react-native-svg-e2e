@@ -55,18 +55,18 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-25;google_apis;armeabi-v7a"
-        - mkdir /home/travis/.android/avd/test.avd
+        - mkdir /home/travis/.android/avd/emulator-5554.avd
         - cd $ANDROID_HOME
-        - mksdcard -l sdcard 200M /home/travis/.android/avd/test.avd/sdcard.img
+        - mksdcard -l sdcard 200M /home/travis/.android/avd/emulator-5554.avd/sdcard.img
         - cd -
         - avdmanager list
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-25;google_apis;armeabi-v7a" -c 200M
-        - echo "hw.sdcard=yes" >> /home/travis/.android/avd/test.avd/config.ini
-        - echo "sdcard.path=/home/travis/.android/avd/test.avd/sdcard.img" >> /home/travis/.android/avd/test.avd/config.ini
-        - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-25;google_apis;armeabi-v7a" -c 200M
+        - echo "hw.sdcard=yes" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "sdcard.path=/home/travis/.android/avd/emulator-5554.avd/sdcard.img" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - cd $ANDROID_HOME/emulator
         - avdmanager list
-        - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
+        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       script:
         - nvm install node
@@ -74,9 +74,9 @@ jobs:
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.debug
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/test.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/test.avd/config.ini
-        - cat /home/travis/.android/avd/test.avd/config.ini
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - cat /home/travis/.android/avd/emulator-5554.avd/config.ini
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
