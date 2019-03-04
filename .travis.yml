@@ -57,7 +57,8 @@ jobs:
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
         - cd $ANDROID_HOME/emulator
-        - emulator -avd test -skin nexus_5 -camera-back none -camera-front none -no-boot-anim -no-window &
+        - android list targets
+        - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window &
         - cd -
       script:
         - nvm install node
