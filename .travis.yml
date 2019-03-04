@@ -2,11 +2,11 @@ aliases:
   - &android
     components:
       - build-tools-26.0.2
-      - android-26
+      - android-25
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-armeabi-v7a-android-26
+      - sys-img-armeabi-v7a-android-25
 
   - &android-cache
     directories:
@@ -54,13 +54,13 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-26;default;armeabi-v7a"
+        - sdkmanager "system-images;android-25;default;armeabi-v7a"
         - mkdir /home/travis/.android/avd/test.avd
         - cd $ANDROID_HOME
         - mksdcard -l sdcard 200M /home/travis/.android/avd/test.avd/sdcard.img
         - cd -
         - avdmanager list
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-26;default;armeabi-v7a" -c 200M
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-25;default;armeabi-v7a" -c 200M
         - echo "hw.sdcard=yes" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.path=/home/travis/.android/avd/test.avd/sdcard.img" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
@@ -79,6 +79,7 @@ jobs:
         - cat /home/travis/.android/avd/test.avd/config.ini
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
+        - adb reverse tcp:8099 tcp:8099
         - detox test --configuration android.emu.release --cleanup
         - ls -lh app/build/outputs/apk
 
