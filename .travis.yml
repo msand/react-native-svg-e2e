@@ -6,11 +6,11 @@ aliases:
       - build-tools-28.0.3
       - build-tools-26.0.2
       - android-28
-      - android-25
+      - android-21
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-armeabi-v7a-google_apis-25
+      - sys-img-armeabi-v7a-google_apis-21
 
   - &android-cache
     directories:
@@ -67,7 +67,7 @@ jobs:
         #- mksdcard -l sdcard 200M /home/travis/.android/avd/emulator-5554.avd/sdcard.img
         - cd -
         - avdmanager list
-        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-25;google_apis;armeabi-v7a" -c 200M
+        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
         #- echo "hw.sdcard=yes" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         #- echo "sdcard.path=/home/travis/.android/avd/emulator-5554.avd/sdcard.img" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         #- echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
