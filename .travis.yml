@@ -70,7 +70,7 @@ jobs:
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - cd $ANDROID_HOME/emulator
         - avdmanager list
-        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
+        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 -gpu swiftshader_indirect -verbose -debug all &
         - cd -
       script:
         - nvm install node
@@ -87,7 +87,7 @@ jobs:
         - sleep 20
         - adb -s emulator-5554 shell "dumpsys power"
         - adb logcat -d
-        - detox test --configuration android.emu.debug --cleanup --headless --loglevel verbose
+        - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
         - ls -lh app/build/outputs/apk
 
     - stage: "build test for example"
