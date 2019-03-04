@@ -2,12 +2,11 @@ aliases:
   - &android
     components:
       - build-tools-26.0.2
-      - android-28
-      - android-21
+      - android-26
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-armeabi-v7a-android-21
+      - sys-img-armeabi-v7a-android-26
 
   - &android-cache
     directories:
@@ -55,17 +54,18 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
+        #- sdkmanager "system-images;android-26;default;armeabi-v7a"
         - mkdir /home/travis/.android/avd/test.avd
         - cd $ANDROID_HOME
         - mksdcard -l sdcard 200M /home/travis/.android/avd/test.avd/sdcard.img
         - cd -
-        - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a" -c /home/travis/.android/avd/test.avd/sdcard.img
+        - avdmanager list
+        - echo no | avdmanager create avd --force -n test -k "system-images;android-26;default;armeabi-v7a" -c /home/travis/.android/avd/test.avd/sdcard.img
         - echo "hw.sdcard=yes" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.path=/home/travis/.android/avd/test.avd/sdcard.img" >> /home/travis/.android/avd/test.avd/config.ini
         - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
         - cd $ANDROID_HOME/emulator
-        - android list target
+        - avdmanager list
         - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       script:
