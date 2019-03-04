@@ -57,6 +57,10 @@ jobs:
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
+        - $ANDROID_HOME/mksdcard -l sdcard 200M /home/travis/.android/avd/test.avd/sdcard.img
+        - echo "hw.sdcard=yes" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo "sdcard.path=/home/travis/.android/avd/test.avd/sdcard.img" >> /home/travis/.android/avd/test.avd/config.ini
+        - echo "sdcard.size=200 MB" >> /home/travis/.android/avd/test.avd/config.ini
         - cd $ANDROID_HOME/emulator
         - android list target
         - emulator -avd test -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
