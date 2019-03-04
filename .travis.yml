@@ -55,21 +55,20 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-
-      before_script:
         - echo no | avdmanager create avd --force -n test -k "system-images;android-21;google_apis;armeabi-v7a"
         - cd $ANDROID_HOME/emulator
         - emulator -avd test -skin 240x426 -camera-back none -camera-front none -no-boot-anim -no-window &
         - cd -
-        - android-wait-for-emulator
-        - adb shell input keyevent 82 &
       script:
         - nvm install node
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.release
+        - echo "skin.name=1" >> /home/travis/.android/avd/test.avd/config.ini
         - cat /home/travis/.android/avd/test.avd/config.ini
+        - android-wait-for-emulator
+        - adb shell input keyevent 82 &
         - detox test --configuration android.emu.release --cleanup --take-screenshots all
         - ls -lh app/build/outputs/apk
 
