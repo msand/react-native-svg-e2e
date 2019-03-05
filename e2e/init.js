@@ -2,7 +2,14 @@ const detox = require('detox');
 const config = require('../package.json').detox;
 const adapter = require('detox/runners/jest/adapter');
 
-jest.setTimeout(900000);
+let timeout = 360000;
+try {
+  timeout = require('../timeout.json');
+} catch (ignore) {
+
+}
+
+jest.setTimeout(timeout);
 jasmine.getEnv().addReporter(adapter);
 
 beforeAll(async () => {
