@@ -77,7 +77,7 @@ jobs:
         - nvm install node
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn
+        - yarn add detox@msand/detox-patch-build#07f01ce
       script:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
