@@ -1654,9 +1654,9 @@ detect-newline@^2.1.0:
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
   integrity sha1-9B8cEL5LAOh7XxPaaAdZ8sW/0+I=
 
-detox@msand/detox-patch-build#8431e9c:
+detox@msand/detox-patch-build#4157e30:
   version "10.0.12"
-  resolved "https://codeload.github.com/msand/detox-patch-build/tar.gz/8431e9c8c00ab33d1d08f40080e366a6cccefc35"
+  resolved "https://codeload.github.com/msand/detox-patch-build/tar.gz/4157e30ac07833d9606768c2a549ae387d8fd9ba"
   dependencies:
     bunyan "^1.8.12"
     bunyan-debug-stream "^1.1.0"
