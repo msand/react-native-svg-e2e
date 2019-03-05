@@ -80,7 +80,7 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
-        - detox build --configuration android.emu.debug
+        - detox build --configuration android.emu.release
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - cat /home/travis/.android/avd/emulator-5554.avd/config.ini
@@ -94,7 +94,7 @@ jobs:
         #- sleep 5
         #- adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk &
         #- sleep 30
-        - detox test --configuration android.emu.debug --cleanup --headless --loglevel trace
+        - detox test --configuration android.emu.release --cleanup --headless --loglevel trace
         - ls -lh app/build/outputs/apk
 
 #    - stage: "build test for example"
