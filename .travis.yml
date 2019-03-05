@@ -71,7 +71,7 @@ jobs:
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         # Start emulator
-        - emulator-headless -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
+        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       install:
         - nvm install node
@@ -170,8 +170,8 @@ jobs:
         - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
 
 stages:
-#  - "test js"
+  - "test js"
   - "build test for example"
-#  - "build test for new project"
-#  - "build test for new project with pods"
+  - "build test for new project"
+  - "build test for new project with pods"
 
