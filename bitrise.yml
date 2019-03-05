@@ -54,7 +54,7 @@ workflows:
             unzip -q emulator-linux-5329922.zip
             ls -al $ANDROID_HOME/emulator
 
-            echo no | avdmanager create avd -n Nexus_5X_API_26_x86 -k "system-images;android-25;google_apis;armeabi-v7a" --force
+            echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-25;google_apis;armeabi-v7a" --force
 
             cd -
     - activate-ssh-key@4.0.3:
@@ -95,7 +95,7 @@ workflows:
             set -x
 
             cd $ANDROID_HOME/emulator
-            ./emulator -no-window -gpu swiftshader_indirect -no-audio -camera-back none -camera-front none @Nexus_5X_API_26_x86 > /dev/null 2>&1 &
+            ./emulator -no-window -gpu swiftshader_indirect -no-audio -camera-back none -camera-front none @emulator-5554 > /dev/null 2>&1 &
             cd -
 
             echo "Waiting for Emulator"
@@ -175,20 +175,40 @@ workflows:
         title: Download canary version of emulator
     - script@1.1.5:
         inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails \nset -e\n#
-            debug log\nset -x\n\ncd $ANDROID_HOME/emulator\n\necho no | avdmanager
-            create avd -n Nexus_5X_API_26_x86 -k \"system-images;android-28;google_apis;x86\"
-            --force\n\n./emulator-headless -no-window -gpu swiftshader_indirect -no-audio
-            -no-boot-anim -camera-back none @Nexus_5X_API_26_x86 > /dev/null 2>&1
-            &\n\necho \"Waiting for Emulator\"\n\nbootanim=\"\"\nfailcounter=0\ntimeout_in_sec=120\n\nuntil
-            [[ \"$bootanim\" =~ \"stopped\" ]]; do\nbootanim=`adb -e shell getprop
-            init.svc.bootanim 2>&1 &`\nif [[ \"$bootanim\" =~ \"device not found\"
-            || \"$bootanim\" =~ \"device offline\" || \"$bootanim\" =~ \"no emulators
-            found\"\n|| \"$bootanim\" =~ \"running\" ]]; then\nlet \"failcounter +=
-            1\"\necho \"Waiting for emulator to start\"\nif [[ $failcounter -gt timeout_in_sec
-            ]]; then\necho \"Timeout ($timeout_in_sec seconds) reached; failed to
-            start emulator\"\nexit 1\nfi\nfi\nsleep 1\ndone\n\necho \"Emulator is
-            ready\"\n"
+        - content: |-
+              #!/usr/bin/env bash
+              # fail if any commands fails
+              set -e
+              # debug log
+              set -x
+
+              cd $ANDROID_HOME/emulator
+
+              echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-28;google_apis;x86" --force
+
+              ./emulator-headless -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -camera-back none @emulator-5554 > /dev/null 2>&1 &
+
+              echo "Waiting for Emulator"
+
+              bootanim=""
+              failcounter=0
+              timeout_in_sec=120
+
+              until [[ "$bootanim" =~ "stopped" ]]; do
+                bootanim=`adb -e shell getprop init.svc.bootanim 2>&1 &`
+                if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline" || "$bootanim" =~ "no emulators found"
+                  || "$bootanim" =~ "running" ]]; then
+                  let "failcounter += 1"
+                  echo "Waiting for emulator to start"
+                  if [[ $failcounter -gt timeout_in_sec ]]; then
+                    echo "Timeout ($timeout_in_sec seconds) reached; failed to start emulator"
+                    exit 1
+                  fi
+                fi
+                sleep 1
+              done
+
+              echo "Emulator is ready"
         title: Create and boot emulator
     - activate-ssh-key@4.0.3:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
