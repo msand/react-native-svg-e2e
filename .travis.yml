@@ -64,15 +64,11 @@ jobs:
         - rm -rf $ANDROID_HOME/emulator
         - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
         - unzip -q emulator-linux-5329922.zip
-        #- mksdcard -l sdcard 200M /home/travis/.android/avd/emulator-5554.avd/sdcard.img
         - cd -
-        - avdmanager list
         - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
-        #- echo "hw.sdcard=yes" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        #- echo "sdcard.path=/home/travis/.android/avd/emulator-5554.avd/sdcard.img" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        #- echo "sdcard.size=200 MB" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - cd $ANDROID_HOME/emulator
-        - avdmanager list avd
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 -gpu swiftshader_indirect &
         - cd -
       script:
@@ -81,21 +77,14 @@ jobs:
         - yarn global add detox-cli
         - yarn
         - detox build --configuration android.emu.release
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - cat /home/travis/.android/avd/emulator-5554.avd/config.ini
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
         - adb -s emulator-5554 shell "dumpsys power"
-        #- adb logcat -d
-        #- adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/debug/app-debug.apk &
-        #- sleep 5
-        #- adb -s emulator-5554 install -r /home/travis/build/msand/react-native-svg-e2e/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk &
-        #- sleep 30
-        - detox test --configuration android.emu.release --cleanup --headless --loglevel trace
-        - ls -lh app/build/outputs/apk
+        - sleep 30
+        - detox test --configuration android.emu.release --headless --loglevel trace
+        - detox test --configuration android.emu.release --headless --loglevel trace
 
 #    - stage: "build test for example"
 #      language: objective-c
@@ -184,3 +173,4 @@ stages:
   - "build test for example"
 #  - "build test for new project"
 #  - "build test for new project with pods"
+
