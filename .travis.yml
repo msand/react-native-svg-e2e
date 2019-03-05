@@ -59,50 +59,51 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - mkdir /home/travis/.android/avd/emulator-5554.avd
-        - cd $ANDROID_HOME
         - rm -rf $ANDROID_HOME/emulator
+        # Install latest canary of emulator
+        - cd $ANDROID_HOME
         - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
         - unzip -q emulator-linux-5329922.zip
         - cd -
+        # Create emulator
         - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
         - cd $ANDROID_HOME/emulator
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 -gpu swiftshader_indirect &
+        # Start emulator
+        - emulator-headless -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
-      script:
+      install:
         - nvm install node
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
+      script:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
-        - adb -s emulator-5554 shell "dumpsys power"
-        - sleep 30
         - detox test --configuration android.emu.release --headless --loglevel trace
         - detox test --configuration android.emu.release --headless --loglevel trace
 
-#    - stage: "build test for example"
-#      language: objective-c
-#      osx_image: xcode10.1
-#      cache: *ios-cache
-#      before_install:
-#      script:
-#        - nvm install node
-#        - nvm alias default node
-#        - brew tap wix/brew
-#        - brew install yarn
-#        - brew install applesimutils
-#        - yarn global add react-native-cli
-#        - yarn global add detox-cli
-#        - yarn
-#        - detox build --configuration ios.sim.release
-#        - xcrun simctl shutdown all
-#        - detox test --configuration ios.sim.release --cleanup --take-screenshots all
+    - stage: "build test for example"
+      language: objective-c
+      osx_image: xcode10.1
+      cache: *ios-cache
+      before_install:
+      script:
+        - nvm install node
+        - nvm alias default node
+        - brew tap wix/brew
+        - brew install yarn
+        - brew install applesimutils
+        - yarn global add react-native-cli
+        - yarn global add detox-cli
+        - yarn
+        - detox build --configuration ios.sim.release
+        - xcrun simctl shutdown all
+        - detox test --configuration ios.sim.release --cleanup --take-screenshots all
 
     - stage: "build test for new project"
       language: android
