@@ -84,7 +84,8 @@ jobs:
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
-        - detox test --configuration android.emu.release --headless --loglevel trace
+        - detox test --configuration android.emu.release --headless --loglevel trace || true
+        - sleep 30
         - detox test --configuration android.emu.release --headless --loglevel trace
 
     - stage: "build test for example"

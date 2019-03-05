@@ -240,12 +240,11 @@ workflows:
         inputs:
         - content: |-
             #!/bin/bash
-            sleep 60
             adb -s emulator-5554 shell "dumpsys power"
             #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/debug/app-debug.apk
             #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             #adb logcat -d
-            detox test --configuration android.emu.release --headless --loglevel trace
+            detox test --configuration android.emu.release --headless --loglevel trace || true
             detox test --configuration android.emu.release --headless --loglevel trace
         title: Detox test
     - deploy-to-bitrise-io@1.3.19:
