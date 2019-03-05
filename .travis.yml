@@ -88,7 +88,7 @@ jobs:
         - detox test --configuration android.emu.release --headless --loglevel trace || true
         - sleep 30
         - echo '590000' > timeout.json
-        - detox test --configuration android.emu.release --headless --loglevel trace
+        - detox test --configuration android.emu.release --headless --loglevel trace --reuse
 
     - stage: "build test for example"
       language: objective-c
