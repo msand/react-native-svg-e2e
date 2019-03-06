@@ -62,8 +62,8 @@ jobs:
         - rm -rf $ANDROID_HOME/emulator
         # Install latest canary of emulator
         - cd $ANDROID_HOME
-        - wget -q https://dl.google.com/android/repository/emulator-linux-5346014.zip
-        - unzip -q emulator-linux-5346014.zip
+        - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
+        - unzip -q emulator-linux-5329922.zip
         - cd -
         # Create emulator
         - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
