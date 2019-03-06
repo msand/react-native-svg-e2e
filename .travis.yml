@@ -81,7 +81,7 @@ jobs:
         - yarn add detox@msand/detox-patch-build#07f01ce
       script:
         - detox build --configuration android.emu.release
-        - android-wait-for-emulator
+        - ./scripts/android-wait-for-emulator.sh
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
