@@ -1,5 +1,7 @@
 addons:
   artifacts: true
+    paths:
+    - $(git ls-files -o artifacts/ | tr "\n" ":")
 
 aliases:
   - &android
