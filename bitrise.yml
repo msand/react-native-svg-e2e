@@ -4,7 +4,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: react-native
 trigger_map:
 - push_branch: "*"
-  workflow: android
+  workflow: primary
 - pull_request_source_branch: "*"
   workflow: primary
 workflows:
@@ -38,26 +38,6 @@ workflows:
     - deploy-to-bitrise-io@1.3.19: {}
   primary:
     steps:
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd $ANDROID_HOME
-
-            rm -rf $ANDROID_HOME/emulator
-            wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
-            unzip -q emulator-linux-5329922.zip
-            ls -al $ANDROID_HOME/emulator
-
-            echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-25;google_apis;armeabi-v7a" --force
-
-            cd -
-        title: Create emulator
     - activate-ssh-key@4.0.3:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0.14: {}
@@ -86,6 +66,45 @@ workflows:
             brew tap wix/brew
             brew install applesimutils
         title: Install Detox Utils
+    - script:
+        inputs:
+        - content: |-
+            #!/bin/bash
+
+            detox build --configuration ios.sim.release
+            detox build --configuration android.emu.release
+        title: Detox - Build Release App
+    - script@1.1.5:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            detox test --configuration ios.sim.release --cleanup --take-screenshots all
+        title: Detox - Run ios E2E Tests
+    - script@1.1.5:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd $ANDROID_HOME
+
+            rm -rf $ANDROID_HOME/emulator
+            wget -q https://dl.google.com/android/repository/emulator-darwin-5346014.zip
+            unzip -q emulator-darwin-5346014.zip
+            ls -al $ANDROID_HOME/emulator
+
+            echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-28;google_apis;x86" --force
+
+            cd -
+        title: Create android emulator
     - script@1.1.5:
         inputs:
         - content: |-
@@ -96,7 +115,7 @@ workflows:
             set -x
 
             cd $ANDROID_HOME/emulator
-            ./emulator -no-window -gpu swiftshader_indirect -no-audio -camera-back none -camera-front none @emulator-5554 > /dev/null 2>&1 &
+            ./emulator-headless -no-window -gpu swiftshader_indirect -no-audio -camera-back none -camera-front none @emulator-5554 > /dev/null 2>&1 &
             cd -
 
             echo "Waiting for Emulator"
@@ -120,7 +139,8 @@ workflows:
             done
 
             echo "Emulator is ready"
-        title: Start emulator
+            sleep 60
+        title: Start android emulator
     - script@1.1.5:
         title: Log
         inputs:
@@ -139,17 +159,8 @@ workflows:
         - content: |-
             #!/bin/bash
 
-            detox build --configuration ios.sim.release
-            detox build --configuration android.emu.release
-        title: Detox - Build Release App
-    - script:
-        inputs:
-        - content: |-
-            #!/bin/bash
-
-            detox test --configuration ios.sim.release --cleanup --take-screenshots all
-            detox test --configuration android.emu.release.bitrise --cleanup --take-screenshots all || true
-        title: Detox - Run E2E Tests
+            detox test --configuration android.emu.release.bitrise --cleanup --take-screenshots all
+        title: Detox - Run android E2E Tests
     - deploy-to-bitrise-io@1.3.19:
         inputs:
         - is_compress: 'true'
@@ -170,8 +181,8 @@ workflows:
 
             rm -rf $ANDROID_HOME/emulator
 
-            wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
-            unzip -q emulator-linux-5329922.zip
+            wget -q https://dl.google.com/android/repository/emulator-linux-5346014.zip
+            unzip -q emulator-linux-5346014.zip
 
             ls -al $ANDROID_HOME/emulator
         title: Download canary version of emulator
@@ -185,7 +196,8 @@ workflows:
 
             npm cache verify
 
-            npm install
+            npm i
+            npm i detox@msand/detox-patch-build#07f01ce
         title: Install NPM Packages
     - npm@1.0.1:
         inputs:
@@ -207,8 +219,8 @@ workflows:
             debug log\nset -x\n\ncd $ANDROID_HOME/emulator\n\necho no | avdmanager
             create avd -n emulator-5554 -k \"system-images;android-28;google_apis;x86\"
             --force\n\n./emulator-headless -no-window -gpu swiftshader_indirect -no-audio
-            -no-boot-anim -camera-back none -camera-front none @emulator-5554 -verbose
-            -debug all > /dev/null 2>&1 &\n\necho \"Waiting for Emulator\"\n\nbootanim=\"\"\nfailcounter=0\ntimeout_in_sec=120\n\nuntil
+            -camera-back none -camera-front none @emulator-5554 -verbose -debug all
+            > /dev/null 2>&1 &\n\necho \"Waiting for Emulator\"\n\nbootanim=\"\"\nfailcounter=0\ntimeout_in_sec=120\n\nuntil
             [[ \"$bootanim\" =~ \"stopped\" ]]; do\n  bootanim=`adb -e shell getprop
             init.svc.bootanim 2>&1 &`\n  if [[ \"$bootanim\" =~ \"device not found\"
             || \"$bootanim\" =~ \"device offline\" || \"$bootanim\" =~ \"no emulators
@@ -233,8 +245,12 @@ workflows:
             #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/debug/app-debug.apk
             #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             #adb logcat -d
-            detox test --configuration android.emu.release --headless --loglevel trace || true
-            detox test --configuration android.emu.release --headless --loglevel trace || true
+            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/release/app-release.apk
+            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk
+            #detox test --configuration android.emu.release --headless --loglevel trace || true
+            #detox test --configuration android.emu.release --headless --loglevel trace || true
+
+            detox test --configuration android.emu.release.bitrise --cleanup --headless --loglevel trace --take-screenshots all || true
     - deploy-to-bitrise-io@1.3.19:
         inputs:
         - is_compress: 'true'
