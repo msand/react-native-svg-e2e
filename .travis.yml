@@ -62,16 +62,17 @@ jobs:
         - rm -rf $ANDROID_HOME/emulator
         # Install latest canary of emulator
         - cd $ANDROID_HOME
+        - sudo apt-get install -y libunwind8 libc++1
         - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
         - unzip -q emulator-linux-5329922.zip
         - cd -
         # Create emulator
-        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
+        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;x86_64" -c 200M
         - cd $ANDROID_HOME/emulator
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         # Start emulator
-        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
+        - emulator-headless -no-accel -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       install:
         - nvm install node
