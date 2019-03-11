@@ -86,7 +86,7 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn add detox@msand/detox-patch-build#07f01ce
+        - yarn add -D detox@msand/detox-patch-build#8a9c562
       script:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
