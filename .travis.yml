@@ -1,6 +1,9 @@
 addons:
   artifacts: true
 
+# Run in VM on Google Compute Engine, slower startup but runs faster (ignored on osx)
+sudo: required
+
 aliases:
   - &android
     components:
