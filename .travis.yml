@@ -86,7 +86,7 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn add -D detox@msand/detox-patch-build#8a9c562
+        - yarn add -D detox@msand/detox-patch-build#e764d3c
       script:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
@@ -94,8 +94,6 @@ jobs:
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
         - adb push android/app/build/outputs/apk/release/app-release.apk /data/local/tmp
-        - adb shell dumpsys window windows | grep -E 'Not Responding' || true
-        - adb shell dumpsys window windows | grep -E 'has stopped' || true
         - travis_wait adb shell pm install /data/local/tmp/app-release.apk
         - adb shell rm /data/local/tmp/app-release.apk
         - adb push android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk /data/local/tmp
