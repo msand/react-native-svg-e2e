@@ -97,6 +97,8 @@ jobs:
         - adb shell pm install /data/local/tmp/app-release-androidTest.apk
         - adb shell rm /data/local/tmp/app-release-androidTest.apk
         - sleep 30
+        - adb shell dumpsys window windows | grep -E 'Not Responding' && adb shell input keyevent 61  && adb shell input keyevent 61  && adb shell input keyevent 66 || true
+        - sleep 5
         - echo '590000' > timeout.json
         - detox test --configuration android.emu.release --loglevel trace --reuse --take-screenshots all
 
