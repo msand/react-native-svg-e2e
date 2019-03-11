@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   test: {
     padding: 5,
     width: '98%',
-    height: '50%',
+    flex: 1,
     borderWidth: 1,
   },
   flatTest: {

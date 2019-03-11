@@ -19,21 +19,18 @@
     "screenshots:android:release": "detox test -c android.emu.release --take-screenshots all"
   },
   "dependencies": {
-    "jest-util": "24.2.0-alpha.0",
+    "jest-util": "24.3.0",
     "react": "16.6.3",
     "react-native": "0.58.6",
-    "react-native-svg": "^9.2.4"
+    "react-native-svg": "^9.3.0"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "24.1.0",
+    "babel-jest": "24.3.1",
     "detox": "^10.0.12",
-    "jest": "^24.1.0",
+    "jest": "^24.3.1",
     "metro-react-native-babel-preset": "0.53.0",
-    "react-test-renderer": "16.6.3"
-  },
-  "resolutions": {
-    "jest-util": "v24.2.0-alpha.0"
+    "react-test-renderer": "16.8.4"
   },
   "jest": {
     "preset": "react-native"
