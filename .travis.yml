@@ -90,8 +90,12 @@ jobs:
         - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
-        - echo '120000' > timeout.json
-        - detox test --configuration android.emu.release --cleanup --loglevel trace || true
+        - adb push android/app/build/outputs/apk/release/app-release.apk /data/local/tmp
+        - adb shell pm install /data/local/tmp/app-release.apk
+        - adb shell rm /data/local/tmp/app-release.apk
+        - adb push android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk /data/local/tmp
+        - adb shell pm install /data/local/tmp/app-release-androidTest.apk
+        - adb shell rm /data/local/tmp/app-release-androidTest.apk
         - sleep 30
         - echo '590000' > timeout.json
         - detox test --configuration android.emu.release --loglevel trace --reuse --take-screenshots all
