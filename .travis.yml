@@ -94,7 +94,9 @@ jobs:
         - adb reverse tcp:8099 tcp:8099
         - sleep 60
         - adb push android/app/build/outputs/apk/release/app-release.apk /data/local/tmp
-        - adb shell pm install /data/local/tmp/app-release.apk
+        - adb shell dumpsys window windows | grep -E 'Not Responding'
+        - adb shell dumpsys window windows | grep -E 'has stopped'
+        - travis_wait adb shell pm install /data/local/tmp/app-release.apk
         - adb shell rm /data/local/tmp/app-release.apk
         - adb push android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk /data/local/tmp
         - adb shell pm install /data/local/tmp/app-release-androidTest.apk
