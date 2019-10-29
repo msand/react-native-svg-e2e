@@ -2,7 +2,7 @@ addons:
   artifacts: true
 
 # Run in VM on Google Compute Engine, slower startup but runs faster (ignored on osx)
-sudo: required
+# sudo: required
 
 aliases:
   - &android
@@ -16,7 +16,6 @@ aliases:
       - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-armeabi-v7a-google_apis-21
 
   - &android-cache
     directories:
@@ -35,7 +34,7 @@ aliases:
       nvm install node
       nvm alias default node
       yarn global add react-native-cli
-      react-native init App --version="0.58.6"
+      react-native init App --version="0.59.9"
       cd App
       yarn add react-native-svg
 
@@ -64,16 +63,9 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - rm -rf $ANDROID_HOME/emulator
-        # Install latest canary of emulator
-        - cd $ANDROID_HOME
-        - sudo apt-get install -y libunwind8 libc++1
-        - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
-        - unzip -q emulator-linux-5329922.zip
-        - cd -
+        - sdkmanager "system-images;android-29;google_apis;x86_64"
         # Create emulator
-        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
+        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-29;google_apis;x86_64" -c 200M
         - cd $ANDROID_HOME/emulator
         - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
         - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
@@ -86,7 +78,7 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn add -D detox@msand/detox-patch-build#e764d3c
+        - yarn add -D detox
       script:
         - detox build --configuration android.emu.release
         - android-wait-for-emulator
