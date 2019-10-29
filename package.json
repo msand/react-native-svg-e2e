@@ -45,7 +45,7 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,name=iPhone 7' -derivedDataPath ios/build | xcpretty",
+        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,OS=13.1,name=iPhone 11 Pro Max' -derivedDataPath ios/build | xcpretty",
         "type": "ios.simulator",
         "name": "iPhone 7"
       },
