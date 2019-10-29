@@ -31,8 +31,8 @@ aliases:
 
   - &init-new-project
     |
-      nvm install node
-      nvm alias default node
+      nvm install 12
+      nvm alias default 12
       yarn global add react-native-cli
       react-native init App --version="0.59.9"
       cd App
@@ -73,8 +73,8 @@ jobs:
         - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
         - cd -
       install:
-        - nvm install node
-        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+        - nvm install 12
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
@@ -104,8 +104,8 @@ jobs:
       cache: *ios-cache
       before_install:
       script:
-        - nvm install node
-        - nvm alias default node
+        - nvm install 12
+        - nvm alias default 12
         - brew tap wix/brew
         - brew install yarn
         - brew install applesimutils
