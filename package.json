@@ -39,27 +39,31 @@
     "configurations": {
       "ios.sim.debug": {
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Debug -destination 'platform=iOS Simulator,name=iPhone XR' -derivedDataPath ios/build",
+        "build": "xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Debug -destination 'platform=iOS Simulator,OS=13.1,name=iPhone 11 Pro Max' -derivedDataPath ios/build",
         "type": "ios.simulator",
-        "name": "iPhone Xʀ"
+        "name": "iPhone 11 Pro Max"
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
         "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -project ios/ReactNativeSvgE2E.xcodeproj -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,OS=13.1,name=iPhone 11 Pro Max' -derivedDataPath ios/build | xcpretty",
         "type": "ios.simulator",
-        "name": "iPhone 7"
+        "name": "iPhone 11 Pro Max"
       },
       "android.emu.debug": {
         "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
         "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
-        "type": "android.attached",
-        "name": "emulator-5554"
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Nexus_5X_API_29_x86"
+        }
       },
       "android.emu.release": {
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
-        "build": "cd android && ./gradlew -q assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
-        "type": "android.attached",
-        "name": "emulator-5554"
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Nexus_5X_API_29_x86"
+        }
       },
       "android.emu.release.bitrise": {
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",

@@ -96,10 +96,10 @@ workflows:
 
             cd $ANDROID_HOME
 
-            rm -rf $ANDROID_HOME/emulator
-            wget -q https://dl.google.com/android/repository/emulator-darwin-5346014.zip
-            unzip -q emulator-darwin-5346014.zip
-            ls -al $ANDROID_HOME/emulator
+            #rm -rf $ANDROID_HOME/emulator
+            #wget -q https://dl.google.com/android/repository/emulator-darwin-5346014.zip
+            #unzip -q emulator-darwin-5346014.zip
+            #ls -al $ANDROID_HOME/emulator
 
             echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-28;google_apis;x86" --force
 
@@ -179,10 +179,10 @@ workflows:
 
             cd $ANDROID_HOME
 
-            rm -rf $ANDROID_HOME/emulator
+            #rm -rf $ANDROID_HOME/emulator
 
-            wget -q https://dl.google.com/android/repository/emulator-linux-5346014.zip
-            unzip -q emulator-linux-5346014.zip
+            #wget -q https://dl.google.com/android/repository/emulator-linux-5346014.zip
+            #unzip -q emulator-linux-5346014.zip
 
             ls -al $ANDROID_HOME/emulator
         title: Download canary version of emulator
