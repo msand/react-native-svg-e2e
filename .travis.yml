@@ -148,8 +148,7 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
-        - set -Eeuxo pipefail && export CODE_SIGNING_REQUIRED=NO && yarn add -D detox@12.11.0
-        - set -Eeuxo pipefail && export CODE_SIGNING_REQUIRED=NO && detox clean-framework-cache && detox build-framework-cache
+        - cd node_modules/detox && ./scripts/build_framework.ios.sh && cd -
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
