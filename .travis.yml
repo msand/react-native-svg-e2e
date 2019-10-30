@@ -9,8 +9,10 @@ aliases:
     components:
       - tools
       - platform-tools
-      - build-tools-27.0.3
+      - build-tools-28.0.3
+      - android-21
       - android-26
+      - android-28
       - extra-google-google_play_services
       - extra-google-m2repository
       - extra-android-m2repository
@@ -51,6 +53,10 @@ jobs:
 
     - stage: "build test for example"
       language: android
+      licenses:
+        - 'android-sdk-preview-license-.+'
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
       jdk: oraclejdk8
       android: *android
       before_cache:
@@ -59,28 +65,35 @@ jobs:
       before_install:
         # Install SDK license so Android Gradle plugin can install deps.
         - mkdir "$ANDROID_HOME/licenses" || true
-        - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+        - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
         - echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
         # Install the rest of tools (e.g., avdmanager)
-        - sdkmanager tools
+        - echo 'count=0' > /home/travis/.android/repositories.cfg # Avoid harmless sdkmanager warning
+        - echo y | sdkmanager "platform-tools" >/dev/null
+        - echo y | sdkmanager "tools" >/dev/null # A second time per Travis docs, gets latest versions
+        - echo y | sdkmanager "build-tools;28.0.3" >/dev/null # Implicit gradle dependency - gradle drives changes
+        - echo y | sdkmanager "platforms;android-21" >/dev/null # We need the API of the emulator we will run
+        - echo y | sdkmanager "platforms;android-28" >/dev/null # We need the API of the current compileSdkVersion from gradle.properties
+        - echo y | sdkmanager "emulator" >/dev/null
+        - echo y | sdkmanager "extras;android;m2repository" >/dev/null
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - rm -rf $ANDROID_HOME/emulator
         # Install latest version of emulator
         # https://aur.archlinux.org/packages/android-emulator/
         # https://aur.archlinux.org/packages/android-emulator-canary/
-        - cd $ANDROID_HOME
+        #- cd $ANDROID_HOME
         - sudo apt-get install -y libunwind8 libc++1
-        - wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
-        - unzip -q emulator-linux-5889189.zip
-        - cd -
+        #- wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
+        #- unzip -q emulator-linux-5889189.zip
+        #- cd -
         # Create emulator
         - echo no | avdmanager create avd --force -n Nexus_5X_API_21 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
         - cd $ANDROID_HOME/emulator
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/Nexus_5X_API_21.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/Nexus_5X_API_21.avd/config.ini
         # Start emulator
-        - emulator -avd Nexus_5X_API_21 -no-window -no-audio -skin 240x426 &
+        - emulator -verbose -avd Nexus_5X_API_21 -no-accel -no-snapshot -no-window $AUDIO -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+        - android-wait-for-emulator
+        - adb shell input keyevent 82 &
         - cd -
       install:
         - nvm install 12
