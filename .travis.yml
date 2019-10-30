@@ -9,14 +9,13 @@ aliases:
     components:
       - tools
       - platform-tools
-      - build-tools-28.0.3
-      - build-tools-26.0.2
-      - android-28
-      - android-21
-      - extra-android-m2repository
+      - build-tools-27.0.3
+      - android-26
       - extra-google-google_play_services
       - extra-google-m2repository
+      - extra-android-m2repository
       - sys-img-x86-android-26
+      - sys-img-x86-android-28
 
   - &android-cache
     directories:
@@ -63,16 +62,6 @@ jobs:
         - echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
-        # Install the system image
-        - sdkmanager "system-images;android-26;google_apis;x86"
-        # Create emulator
-        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-26;google_apis;x86" -c 200M
-        - cd $ANDROID_HOME/emulator
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        # Start emulator
-        - emulator -avd emulator-5554 -no-window -no-audio -skin 240x426 &
-        - cd -
       install:
         - nvm install 12
         - curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -108,12 +97,14 @@ jobs:
       before_install:
       script:
         - nvm install 12
+        - nvm use 12
         - nvm alias default 12
         - brew tap wix/brew
         - brew install yarn
         - brew install applesimutils
         - yarn global add react-native-cli
         - yarn global add detox-cli
+        - yarn
         - yarn add -D detox
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
