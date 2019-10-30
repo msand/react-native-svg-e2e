@@ -80,7 +80,7 @@ jobs:
         # This is cause of react-native: react native's Gradle tasks partially run even without running Detox'
         # compile-from-source flavour :-/
         # TODO find a way to get rid of this step
-        - echo y | sdkmanager ndk-bundle
+        - echo y | sdkmanager ndk-bundle >/dev/null
         - export ANDROID_NDK="$ANDROID_HOME/ndk-bundle"
         # Need to update the tools so we'd have a decent 'emulator' bin and the newer 'avdmanager' (instead of the 'android' bin)
         - echo yes | sdkmanager --update
@@ -148,7 +148,7 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
-        - set -Eeuxo pipefail && export CODE_SIGNING_REQUIRED=NO && yarn add -D detox
+        - set -Eeuxo pipefail && export CODE_SIGNING_REQUIRED=NO && yarn add -D detox@12.11.0
         - set -Eeuxo pipefail && export CODE_SIGNING_REQUIRED=NO && detox clean-framework-cache && detox build-framework-cache
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
