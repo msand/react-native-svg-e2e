@@ -102,7 +102,7 @@ jobs:
         - cd $ANDROID_HOME/emulator
         # Start emulator
         - emulator @Nexus_5X_API_26 -verbose -no-window -no-snapshot -no-boot-anim -no-accel -noaudio -camera-back none -camera-front none  -gpu swiftshader_indirect &
-        - android-wait-for-emulator
+        #- android-wait-for-emulator
         - adb shell input keyevent 82 &
         - cd -
       install:
