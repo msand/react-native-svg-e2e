@@ -64,6 +64,13 @@ jobs:
         - sdkmanager tools
         # Install the system image
         - sdkmanager "system-images;android-26;google_apis;x86"
+        - rm -rf $ANDROID_HOME/emulator
+        # Install latest canary of emulator
+        - cd $ANDROID_HOME
+        - sudo apt-get install -y libunwind8 libc++1
+        - wget -q https://dl.google.com/android/repository/emulator-linux-5839083.zip
+        - unzip -q emulator-linux-5839083.zip
+        - cd -
         # Create emulator
         - echo no | avdmanager create avd --force -n Nexus_5X_API_26 -k "system-images;android-26;google_apis;x86" -c 200M
         - cd $ANDROID_HOME/emulator
