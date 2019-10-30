@@ -67,8 +67,8 @@ jobs:
         # Create emulator
         - echo no | avdmanager create avd --force -n Nexus_5X_API_26 -k "system-images;android-26;google_apis;x86" -c 200M
         - cd $ANDROID_HOME/emulator
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/Nexus_5X_API_26.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/Nexus_5X_API_26.avd/config.ini
         # Start emulator
         - emulator -avd Nexus_5X_API_26 -no-window -no-audio -skin 240x426 &
         - cd -
@@ -115,8 +115,8 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
-        - yarn add -D detox
-        - detox clean-framework-cache && detox build-framework-cache
+        - set -o pipefail && export CODE_SIGNING_REQUIRED=NO && yarn add -D detox
+        - set -o pipefail && export CODE_SIGNING_REQUIRED=NO && detox clean-framework-cache && detox build-framework-cache
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
