@@ -16,8 +16,8 @@ aliases:
       - extra-google-google_play_services
       - extra-google-m2repository
       - extra-android-m2repository
-      - sys-img-x86-android-26
-      - sys-img-x86-android-28
+      #- sys-img-x86-android-26
+      #- sys-img-x86-android-28
       - sys-img-armeabi-v7a-google_apis-21
 
   - &android-cache
@@ -78,10 +78,10 @@ jobs:
         - echo y | sdkmanager "extras;android;m2repository" >/dev/null
         # Install the system image
         - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - rm -rf $ANDROID_HOME/emulator
         # Install latest version of emulator
         # https://aur.archlinux.org/packages/android-emulator/
         # https://aur.archlinux.org/packages/android-emulator-canary/
+        #- rm -rf $ANDROID_HOME/emulator
         #- cd $ANDROID_HOME
         - sudo apt-get install -y libunwind8 libc++1
         #- wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
