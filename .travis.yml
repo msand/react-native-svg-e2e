@@ -125,7 +125,7 @@ jobs:
       cache: *android-cache
       script:
         - *init-new-project
-        - react-native link
+        - yarn run react-native link
         - cd android
         - ./gradlew build
         - ls -lh app/build/outputs/apk
@@ -137,7 +137,7 @@ jobs:
       script:
         - brew install yarn
         - *init-new-project
-        - react-native link
+        - yarn run react-native link
         - cd ios
         - xcodebuild -project App.xcodeproj -configuration Debug -scheme App -sdk iphonesimulator -quiet
 
