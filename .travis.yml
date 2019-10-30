@@ -104,7 +104,6 @@ jobs:
         #- android-wait-for-emulator
         - ./ci.android-waitforemulator.sh
         - adb shell input keyevent 82 &
-        - cd -
       install:
         - nvm install 10
         - curl -o- -L https://yarnpkg.com/install.sh | bash
