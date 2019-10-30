@@ -139,9 +139,9 @@ jobs:
       cache: *ios-cache
       before_install:
       script:
-        - nvm install 12
-        - nvm use 12
-        - nvm alias default 12
+        - nvm install 10
+        - nvm use 10
+        - nvm alias default 10
         - brew tap wix/brew
         - brew install yarn
         - brew install applesimutils
