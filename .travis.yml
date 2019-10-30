@@ -62,6 +62,16 @@ jobs:
         - echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
+        # Install the system image
+        - sdkmanager "system-images;android-26;google_apis;x86"
+        # Create emulator
+        - echo no | avdmanager create avd --force -n Nexus_5X_API_26 -k "system-images;android-26;google_apis;x86" -c 200M
+        - cd $ANDROID_HOME/emulator
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        # Start emulator
+        - emulator -avd Nexus_5X_API_26 -no-window -no-audio -skin 240x426 &
+        - cd -
       install:
         - nvm install 12
         - curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -106,6 +116,7 @@ jobs:
         - yarn global add detox-cli
         - yarn
         - yarn add -D detox
+        - detox clean-framework-cache && detox build-framework-cache
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
