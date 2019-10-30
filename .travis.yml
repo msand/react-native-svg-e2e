@@ -100,7 +100,10 @@ jobs:
 
     - stage: "build test for example"
       language: objective-c
-      osx_image: xcode11.2
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       before_install:
       script:
@@ -132,7 +135,10 @@ jobs:
 
     - stage: "build test for new project"
       language: objective-c
-      osx_image: xcode11.2
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       script:
         - brew install yarn
@@ -143,7 +149,10 @@ jobs:
 
     - stage: "build test for new project with pods"
       language: objective-c
-      osx_image: xcode11.2
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       script:
         - brew install yarn
