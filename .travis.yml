@@ -68,8 +68,8 @@ jobs:
         # Install latest canary of emulator
         - cd $ANDROID_HOME
         - sudo apt-get install -y libunwind8 libc++1
-        - wget -q https://dl.google.com/android/repository/emulator-linux-5839083.zip
-        - unzip -q emulator-linux-5839083.zip
+        - wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
+        - unzip -q emulator-linux-5889189.zip
         - cd -
         # Create emulator
         - echo no | avdmanager create avd --force -n Nexus_5X_API_26 -k "system-images;android-26;google_apis;x86" -c 200M
