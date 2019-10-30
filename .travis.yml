@@ -2,7 +2,7 @@ addons:
   artifacts: true
 
 # Run in VM on Google Compute Engine, slower startup but runs faster (ignored on osx)
-# sudo: required
+sudo: required
 
 aliases:
   - &android
@@ -16,6 +16,7 @@ aliases:
       - extra-android-m2repository
       - sys-img-x86-android-26
       - sys-img-x86-android-28
+      - sys-img-armeabi-v7a-google_apis-21
 
   - &android-cache
     directories:
@@ -63,21 +64,23 @@ jobs:
         # Install the rest of tools (e.g., avdmanager)
         - sdkmanager tools
         # Install the system image
-        - sdkmanager "system-images;android-26;google_apis;x86"
+        - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
         - rm -rf $ANDROID_HOME/emulator
-        # Install latest canary of emulator
+        # Install latest version of emulator
+        # https://aur.archlinux.org/packages/android-emulator/
+        # https://aur.archlinux.org/packages/android-emulator-canary/
         - cd $ANDROID_HOME
         - sudo apt-get install -y libunwind8 libc++1
         - wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
         - unzip -q emulator-linux-5889189.zip
         - cd -
         # Create emulator
-        - echo no | avdmanager create avd --force -n Nexus_5X_API_26 -k "system-images;android-26;google_apis;x86" -c 200M
+        - echo no | avdmanager create avd --force -n Nexus_5X_API_21 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
         - cd $ANDROID_HOME/emulator
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/Nexus_5X_API_26.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/Nexus_5X_API_26.avd/config.ini
+        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/Nexus_5X_API_21.avd/config.ini
+        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/Nexus_5X_API_21.avd/config.ini
         # Start emulator
-        - emulator -avd Nexus_5X_API_26 -no-window -no-audio -skin 240x426 &
+        - emulator -avd Nexus_5X_API_21 -no-window -no-audio -skin 240x426 &
         - cd -
       install:
         - nvm install 12
