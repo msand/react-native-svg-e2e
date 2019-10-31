@@ -131,7 +131,7 @@ jobs:
 
     - stage: "build test for example"
       language: objective-c
-      osx_image: xcode11.2
+      osx_image: xcode11
       env:
         - REACT_NATIVE_VERSION=0.59.9
           PATH=$PATH:~/Library/Python/2.7/bin
