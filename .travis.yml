@@ -10,13 +10,12 @@ aliases:
       - tools
       - platform-tools
       - build-tools-28.0.3
-      - build-tools-26.0.2
+      - android-26
       - android-28
-      - android-21
-      - extra-android-m2repository
       - extra-google-google_play_services
       - extra-google-m2repository
-      - sys-img-armeabi-v7a-google_apis-21
+      - extra-android-m2repository
+      - sys-img-x86_64-android-26
 
   - &android-cache
     directories:
@@ -32,10 +31,11 @@ aliases:
 
   - &init-new-project
     |
-      nvm install node
-      nvm alias default node
+      nvm install 12
+      nvm use 12
+      nvm alias default 12
       yarn global add react-native-cli
-      react-native init App --version="0.58.6"
+      react-native init App --version="0.59.9"
       cd App
       yarn add react-native-svg
 
@@ -51,6 +51,10 @@ jobs:
 
     - stage: "build test for example"
       language: android
+      licenses:
+        - 'android-sdk-preview-license-.+'
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
       jdk: oraclejdk8
       android: *android
       before_cache:
@@ -59,61 +63,79 @@ jobs:
       before_install:
         # Install SDK license so Android Gradle plugin can install deps.
         - mkdir "$ANDROID_HOME/licenses" || true
-        - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+        - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
         - echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
         # Install the rest of tools (e.g., avdmanager)
-        - sdkmanager tools
+        - echo 'count=0' > /home/travis/.android/repositories.cfg # Avoid harmless sdkmanager warning
+        - echo y | sdkmanager "platform-tools" >/dev/null
+        - echo y | sdkmanager "tools" >/dev/null # A second time per Travis docs, gets latest versions
+        - echo y | sdkmanager "build-tools;28.0.3" >/dev/null # Implicit gradle dependency - gradle drives changes
+        - echo y | sdkmanager "platforms;android-26" >/dev/null # We need the API of the emulator we will run
+        - echo y | sdkmanager "platforms;android-28" >/dev/null # We need the API of the current compileSdkVersion from gradle.properties
+        - echo y | sdkmanager "emulator" >/dev/null
+        - echo y | sdkmanager "extras;android;m2repository" >/dev/null
         # Install the system image
-        - sdkmanager "system-images;android-21;google_apis;armeabi-v7a"
-        - rm -rf $ANDROID_HOME/emulator
-        # Install latest canary of emulator
-        - cd $ANDROID_HOME
+        - sdkmanager "system-images;android-26;google_apis;x86_64"
+        # This is cause of react-native: react native's Gradle tasks partially run even without running Detox'
+        # compile-from-source flavour :-/
+        # TODO find a way to get rid of this step
+        - echo y | sdkmanager ndk-bundle >/dev/null
+        - export ANDROID_NDK="$ANDROID_HOME/ndk-bundle"
+        # Need to update the tools so we'd have a decent 'emulator' bin and the newer 'avdmanager' (instead of the 'android' bin)
+        - echo yes | sdkmanager --update
+        - sdkmanager --list
+        # Install latest version of emulator
+        # https://aur.archlinux.org/packages/android-emulator/
+        # https://aur.archlinux.org/packages/android-emulator-canary/
+        #- rm -rf $ANDROID_HOME/emulator
+        #- cd $ANDROID_HOME
         - sudo apt-get install -y libunwind8 libc++1
-        - wget -q https://dl.google.com/android/repository/emulator-linux-5329922.zip
-        - unzip -q emulator-linux-5329922.zip
-        - cd -
+        #- wget -q https://dl.google.com/android/repository/emulator-linux-5889189.zip
+        #- unzip -q emulator-linux-5889189.zip
+        #- cd -
         # Create emulator
-        - echo no | avdmanager create avd --force -n emulator-5554 -k "system-images;android-21;google_apis;armeabi-v7a" -c 200M
-        - cd $ANDROID_HOME/emulator
-        - echo "hw.lcd.width=240" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
-        - echo "hw.lcd.height=426" >> /home/travis/.android/avd/emulator-5554.avd/config.ini
+        - echo no | avdmanager create avd --force --name Nexus_5X_API_26 --abi x86_64 --device "Nexus 5X" -k "system-images;android-26;default;x86_64" -c 200M
+        - echo "skin.name=1080x1920" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
+        - echo "vm.heapSize=512" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
+        - echo "hw.ramSize=1024" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
         # Start emulator
-        - emulator -avd emulator-5554 -camera-back none -camera-front none -no-boot-anim -no-window -no-audio -skin 240x426 &
-        - cd -
+        - /usr/local/android-sdk/tools/emulator @Nexus_5X_API_26 -verbose -no-window -no-snapshot -no-boot-anim -no-accel -noaudio -camera-back none -camera-front none  -gpu swiftshader_indirect &
+        - ./ci.android-waitforemulator.sh
+        - adb shell input keyevent 82 &
       install:
-        - nvm install node
-        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+        - nvm install 10
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn add -D detox@msand/detox-patch-build#e764d3c
+        - yarn
       script:
         - detox build --configuration android.emu.release
-        - android-wait-for-emulator
-        - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
-        - sleep 60
         - adb push android/app/build/outputs/apk/release/app-release.apk /data/local/tmp
         - travis_wait adb shell pm install /data/local/tmp/app-release.apk
         - adb shell rm /data/local/tmp/app-release.apk
         - adb push android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk /data/local/tmp
         - adb shell pm install /data/local/tmp/app-release-androidTest.apk
         - adb shell rm /data/local/tmp/app-release-androidTest.apk
-        - sleep 30
         - adb shell dumpsys window windows | grep -E 'Not Responding' && adb shell input keyevent 61  && adb shell input keyevent 61  && adb shell input keyevent 66 || true
         - adb shell dumpsys window windows | grep -E 'has stopped' && adb shell input keyevent 61 && adb shell input keyevent 66 || true
-        - sleep 5
         - echo '590000' > timeout.json
         - detox test --configuration android.emu.release --loglevel trace --reuse --take-screenshots all
 
     - stage: "build test for example"
       language: objective-c
-      osx_image: xcode10.1
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       before_install:
       script:
-        - nvm install node
-        - nvm alias default node
+        - nvm install 10
+        - nvm use 10
+        - nvm alias default 10
         - brew tap wix/brew
         - brew install yarn
         - brew install applesimutils
@@ -133,25 +155,31 @@ jobs:
       cache: *android-cache
       script:
         - *init-new-project
-        - react-native link
+        - yarn run react-native link
         - cd android
         - ./gradlew build
         - ls -lh app/build/outputs/apk
 
     - stage: "build test for new project"
       language: objective-c
-      osx_image: xcode10.1
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       script:
         - brew install yarn
         - *init-new-project
-        - react-native link
+        - yarn run react-native link
         - cd ios
         - xcodebuild -project App.xcodeproj -configuration Debug -scheme App -sdk iphonesimulator -quiet
 
     - stage: "build test for new project with pods"
       language: objective-c
-      osx_image: xcode10.1
+      osx_image: xcode10.2
+      env:
+        - REACT_NATIVE_VERSION=0.59.9
+          PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
       script:
         - brew install yarn
@@ -188,9 +216,49 @@ jobs:
         - pod install --repo-update
         - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
 
+    - stage: "build test for auto-linking"
+      language: objective-c
+      os: osx
+      osx_image: xcode11.2
+      cache: *ios-cache
+      script:
+        - nvm install 12
+        - nvm use 12
+        - nvm alias default 12
+        - brew install yarn
+        - yarn global add react-native-cli
+        - react-native init App
+        - cd App
+        - yarn add react-native-svg
+        - cd ios
+        - pod install --repo-update
+        - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
+
+    - stage: "build test for auto-linking"
+      language: android
+      jdk: oraclejdk8
+      android: *android
+      before_cache:
+        - rm ~/.gradle/caches/modules-2/modules-2.lock
+      cache: *android-cache
+      script:
+        - nvm install 12
+        - nvm use 12
+        - nvm alias default 12
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
+        - yarn global add react-native-cli
+        - react-native init App
+        - cd App
+        - yarn add react-native-svg
+        - cd android
+        - ./gradlew build
+        - ls -lh app/build/outputs/apk
+
 stages:
   - "test js"
   - "build test for example"
   - "build test for new project"
   - "build test for new project with pods"
+  - "build test for auto-linking"
 
