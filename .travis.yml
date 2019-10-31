@@ -15,8 +15,6 @@ aliases:
       - extra-google-google_play_services
       - extra-google-m2repository
       - extra-android-m2repository
-      #- sys-img-x86-android-26
-      #- sys-img-x86-android-28
       - sys-img-x86_64-android-26
 
   - &android-cache
@@ -34,6 +32,7 @@ aliases:
   - &init-new-project
     |
       nvm install 12
+      nvm use 12
       nvm alias default 12
       yarn global add react-native-cli
       react-native init App --version="0.59.9"
@@ -101,7 +100,6 @@ jobs:
         - echo "hw.ramSize=1024" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
         # Start emulator
         - /usr/local/android-sdk/tools/emulator @Nexus_5X_API_26 -verbose -no-window -no-snapshot -no-boot-anim -no-accel -noaudio -camera-back none -camera-front none  -gpu swiftshader_indirect &
-        #- android-wait-for-emulator
         - ./ci.android-waitforemulator.sh
         - adb shell input keyevent 82 &
       install:
@@ -110,11 +108,9 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
-        - yarn add -D detox
+        - yarn
       script:
         - detox build --configuration android.emu.release
-        - sleep 120
-        - adb shell input keyevent 82 &
         - adb reverse tcp:8099 tcp:8099
         - adb push android/app/build/outputs/apk/release/app-release.apk /data/local/tmp
         - travis_wait adb shell pm install /data/local/tmp/app-release.apk
@@ -122,10 +118,8 @@ jobs:
         - adb push android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk /data/local/tmp
         - adb shell pm install /data/local/tmp/app-release-androidTest.apk
         - adb shell rm /data/local/tmp/app-release-androidTest.apk
-        - sleep 30
         - adb shell dumpsys window windows | grep -E 'Not Responding' && adb shell input keyevent 61  && adb shell input keyevent 61  && adb shell input keyevent 66 || true
         - adb shell dumpsys window windows | grep -E 'has stopped' && adb shell input keyevent 61 && adb shell input keyevent 66 || true
-        - sleep 5
         - echo '590000' > timeout.json
         - detox test --configuration android.emu.release --loglevel trace --reuse --take-screenshots all
 
@@ -148,7 +142,6 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
-        - cd node_modules/detox && ./scripts/build_framework.ios.sh && cd -
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
@@ -161,6 +154,8 @@ jobs:
         - rm ~/.gradle/caches/modules-2/modules-2.lock
       cache: *android-cache
       script:
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
         - *init-new-project
         - yarn run react-native link
         - cd android
@@ -223,9 +218,48 @@ jobs:
         - pod install --repo-update
         - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
 
+    - stage: "build test for auto-linking"
+      language: objective-c
+      osx_image: xcode11.2
+      cache: *ios-cache
+      script:
+        - nvm install 12
+        - nvm use 12
+        - nvm alias default 12
+        - brew install yarn
+        - yarn global add react-native-cli
+        - react-native init App
+        - cd App
+        - yarn add react-native-svg
+        - cd ios
+        - pod install --repo-update
+        - xcodebuild -workspace App.xcworkspace -scheme App -sdk iphonesimulator -quiet
+
+    - stage: "build test for auto-linking"
+      language: android
+      jdk: oraclejdk8
+      android: *android
+      before_cache:
+        - rm ~/.gradle/caches/modules-2/modules-2.lock
+      cache: *android-cache
+      script:
+        - nvm install 12
+        - nvm use 12
+        - nvm alias default 12
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
+        - yarn global add react-native-cli
+        - react-native init App
+        - cd App
+        - yarn add react-native-svg
+        - cd android
+        - ./gradlew build
+        - ls -lh app/build/outputs/apk
+
 stages:
   - "test js"
   - "build test for example"
   - "build test for new project"
   - "build test for new project with pods"
+  - "build test for auto-linking"
 
