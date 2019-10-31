@@ -104,6 +104,8 @@ jobs:
         - adb shell input keyevent 82 &
       install:
         - nvm install 10
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
@@ -216,6 +218,7 @@ jobs:
 
     - stage: "build test for auto-linking"
       language: objective-c
+      os: osx
       osx_image: xcode11.2
       cache: *ios-cache
       script:
