@@ -104,8 +104,6 @@ jobs:
         - adb shell input keyevent 82 &
       install:
         - nvm install 10
-        - curl -o- -L https://yarnpkg.com/install.sh | bash
-        - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
@@ -154,8 +152,6 @@ jobs:
         - rm ~/.gradle/caches/modules-2/modules-2.lock
       cache: *android-cache
       script:
-        - curl -o- -L https://yarnpkg.com/install.sh | bash
-        - export PATH=$HOME/.yarn/bin:$PATH
         - *init-new-project
         - yarn run react-native link
         - cd android
@@ -246,8 +242,6 @@ jobs:
         - nvm install 12
         - nvm use 12
         - nvm alias default 12
-        - curl -o- -L https://yarnpkg.com/install.sh | bash
-        - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - react-native init App
         - cd App
