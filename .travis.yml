@@ -245,6 +245,8 @@ jobs:
         - nvm install 12
         - nvm use 12
         - nvm alias default 12
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
         - yarn global add react-native-cli
         - react-native init App
         - cd App
