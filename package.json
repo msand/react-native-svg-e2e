@@ -29,7 +29,7 @@
     "babel-jest": "24.9.0",
     "detox": "14.5.1",
     "jest": "24.9.0",
-    "metro-react-native-babel-preset": "0.53.0",
+    "metro-react-native-babel-preset": "0.57.0",
     "react-test-renderer": "16.8.4"
   },
   "jest": {

@@ -4076,13 +4076,6 @@ metro-babel7-plugin-react-transform@0.51.1:
   dependencies:
     "@babel/helper-module-imports" "^7.0.0"
 
-metro-babel7-plugin-react-transform@0.53.0:
-  version "0.53.0"
-  resolved "https://registry.yarnpkg.com/metro-babel7-plugin-react-transform/-/metro-babel7-plugin-react-transform-0.53.0.tgz#44b0703297a2e389917eb45f9bbda73a088f2750"
-  integrity sha512-xDx6j0ArTJYbqQdgvADVjf01ypvU615mT1ayfwEJhJFwa45JRZ8UEmC+AWHFvOUnE071kRA5xczxeg+TSywO4g==
-  dependencies:
-    "@babel/helper-module-imports" "^7.0.0"
-
 metro-cache@0.51.1:
   version "0.51.1"
   resolved "https://registry.yarnpkg.com/metro-cache/-/metro-cache-0.51.1.tgz#d0b296eab8e009214413bba87e4eac3d9b44cd04"
@@ -4208,10 +4201,10 @@ metro-react-native-babel-preset@0.51.1:
     metro-babel7-plugin-react-transform "0.51.1"
     react-transform-hmr "^1.0.4"
 
-metro-react-native-babel-preset@0.53.0:
-  version "0.53.0"
-  resolved "https://registry.yarnpkg.com/metro-react-native-babel-preset/-/metro-react-native-babel-preset-0.53.0.tgz#4e8147dd56c94b6f4e09e8b067b27f2e0ec757a1"
-  integrity sha512-KP8LVPs8az1x0hbZzZRFWmLxT9rYA8QhJATMlYLQfArahrGhhdw+9+LbHDyvTDmqRKBzR3nnLGar2/Rjxg7cgw==
+metro-react-native-babel-preset@0.57.0:
+  version "0.57.0"
+  resolved "https://registry.yarnpkg.com/metro-react-native-babel-preset/-/metro-react-native-babel-preset-0.57.0.tgz#bbbce26a20d9ca3fdc08f0df564bc982b82651b7"
+  integrity sha512-pvLh1QOwdxsjgYE2a+4aTKs3LSF3+t4jscxHtkND6wsJnKVVspLt8FkDaORa6zr3Fq12tVpEt5NJMdgtWqBpaA==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.0.0"
     "@babel/plugin-proposal-export-default-from" "^7.0.0"
@@ -4247,8 +4240,7 @@ metro-react-native-babel-preset@0.53.0:
     "@babel/plugin-transform-typescript" "^7.0.0"
     "@babel/plugin-transform-unicode-regex" "^7.0.0"
     "@babel/template" "^7.0.0"
-    metro-babel7-plugin-react-transform "0.53.0"
-    react-transform-hmr "^1.0.4"
+    react-refresh "^0.4.0"
 
 metro-react-native-babel-transformer@0.51.0:
   version "0.51.0"
@@ -5329,6 +5321,11 @@ react-proxy@^1.1.7:
   dependencies:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
+
+react-refresh@^0.4.0:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.4.2.tgz#54a277a6caaac2803d88f1d6f13c1dcfbd81e334"
+  integrity sha512-kv5QlFFSZWo7OlJFNYbxRtY66JImuP2LcrFgyJfQaf85gSP+byzG21UbDQEYjU7f//ny8rwiEkO6py2Y+fEgAQ==
 
 react-test-renderer@16.8.4:
   version "16.8.4"
