@@ -141,6 +141,9 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
+        - cd ios
+        - pod install --repo-update
+        - cd ..
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
