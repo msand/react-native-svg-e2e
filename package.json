@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "test": "jest",
+    "lint": "eslint .",
     "test:e2e:build:ios": "detox build -c ios.sim.debug",
     "test:e2e:build:android": "detox build -c android.emu.debug",
     "test:e2e:build:ios:release": "detox build -c ios.sim.release",
@@ -25,12 +26,15 @@
     "react-native-svg": "9.13.3"
   },
   "devDependencies": {
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "24.9.0",
+    "@babel/core": "7.6.4",
+    "@babel/runtime": "7.6.3",
+    "@react-native-community/eslint-config": "0.0.5",
+    "babel-jest": "^24.9.0",
     "detox": "14.6.0",
+    "eslint": "6.6.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.57.0",
-    "react-test-renderer": "16.8.4"
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"
