@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "jest-util": "24.9.0",
-    "react": "16.8.3",
-    "react-native": "0.59.9",
+    "react": "16.8.6",
+    "react-native": "0.60.6",
     "react-native-svg": "9.13.3"
   },
   "devDependencies": {
