@@ -23,7 +23,7 @@
     "jest-util": "24.9.0",
     "react": "16.8.6",
     "react-native": "0.60.6",
-    "react-native-svg": "9.13.3"
+    "react-native-svg": "https://github.com/Debens/react-native-svg"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",
