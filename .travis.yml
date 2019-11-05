@@ -128,10 +128,9 @@ jobs:
       os: osx
       osx_image: xcode10.2
       env:
-        - REACT_NATIVE_VERSION=0.59.9
+        - REACT_NATIVE_VERSION=0.60.6
           PATH=$PATH:~/Library/Python/2.7/bin
       cache: *ios-cache
-      before_install:
       script:
         - nvm install 10
         - nvm use 10
@@ -142,6 +141,10 @@ jobs:
         - yarn global add react-native-cli
         - yarn global add detox-cli
         - yarn
+        - cd ios
+        - gem install cocoapods
+        - pod install
+        - cd ..
         - detox build --configuration ios.sim.release
         - xcrun simctl shutdown all
         - detox test --configuration ios.sim.release --cleanup --take-screenshots all
