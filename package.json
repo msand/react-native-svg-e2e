@@ -32,7 +32,7 @@
     "@babel/runtime": "7.6.3",
     "@react-native-community/eslint-config": "0.0.5",
     "babel-jest": "24.9.0",
-    "detox": "14.6.0",
+    "detox": "14.8.1",
     "eslint": "6.6.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.57.0",
