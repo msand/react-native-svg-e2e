@@ -184,8 +184,8 @@ workflows:
 
             rm -rf $ANDROID_HOME/emulator
 
-            wget -q https://dl.google.com/android/repository/emulator-linux-5346014.zip
-            unzip -q emulator-linux-5346014.zip
+            wget -q https://dl.google.com/android/repository/emulator-linux-6203977.zip
+            unzip -q emulator-linux-6203977.zip
 
             ls -al $ANDROID_HOME/emulator
         title: Download canary version of emulator
@@ -221,7 +221,7 @@ workflows:
         - content: "#!/usr/bin/env bash\n# fail if any commands fails \nset -e\n#
             debug log\nset -x\n\ncd $ANDROID_HOME/emulator\n\necho no | avdmanager
             create avd -n emulator-5554 -k \"system-images;android-28;google_apis;x86\"
-            --force\n\n./emulator-headless -no-window -gpu swiftshader_indirect -no-audio
+            --force\n\n./emulator-headless -no-window -gpu host -no-audio
             -camera-back none -camera-front none @emulator-5554 -verbose -debug all
             > /dev/null 2>&1 &\n\necho \"Waiting for Emulator\"\n\nbootanim=\"\"\nfailcounter=0\ntimeout_in_sec=120\n\nuntil
             [[ \"$bootanim\" =~ \"stopped\" ]]; do\n  bootanim=`adb -e shell getprop

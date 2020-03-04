@@ -99,7 +99,7 @@ jobs:
         - echo "vm.heapSize=512" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
         - echo "hw.ramSize=1024" >> ~/.android/avd/Nexus_5X_API_26.avd/config.ini
         # Start emulator
-        - /usr/local/android-sdk/tools/emulator @Nexus_5X_API_26 -verbose -no-window -no-snapshot -no-boot-anim -no-accel -noaudio -camera-back none -camera-front none  -gpu swiftshader_indirect &
+        - /usr/local/android-sdk/tools/emulator @Nexus_5X_API_26 -verbose -no-window -no-snapshot -no-boot-anim -no-accel -noaudio -camera-back none -camera-front none  -gpu host &
         - ./ci.android-waitforemulator.sh
         - adb shell input keyevent 82 &
       install:
