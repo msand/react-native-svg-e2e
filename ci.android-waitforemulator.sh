@@ -22,10 +22,6 @@ while [[ -z ${LAUNCHER_READY} ]]; do
         echo "Detected ConversationListActivity, Dismissing..."
         adb shell input keyevent KEYCODE_MENU
     ;;
-    *)
-        echo "Waiting for launcher..."
-        sleep 3
-    ;;
     *"Not Responding"*)
         echo "Detected an ANR! Dismissing..."
         adb shell input keyevent KEYCODE_DPAD_DOWN
