@@ -75,7 +75,7 @@
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
         "build": "cd android && ./gradlew -q assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
         "type": "android.attached",
-        "name": "Android_Accelerated_Oreo"
+        "name": "emulator-5554"
       }
     },
     "test-runner": "jest"
