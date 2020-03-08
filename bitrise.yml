@@ -3,285 +3,101 @@ format_version: '4'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: react-native
 trigger_map:
-- push_branch: "*"
-  workflow: primary
-- pull_request_source_branch: "*"
-  workflow: primary
+  - push_branch: "*"
+    workflow: primary
+  - pull_request_source_branch: "*"
+    workflow: primary
 workflows:
-  deploy:
-    steps:
-    - activate-ssh-key@4.0.3:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0.14: {}
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/bin/bash
-
-            npm cache verify
-
-            npm install
-        title: Install NPM Packages
-    - install-missing-android-tools@2.3.5:
-        inputs:
-        - gradlew_path: "$PROJECT_LOCATION/gradlew"
-    - android-build@0.9.5:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-    - certificate-and-profile-installer@1.10.1: {}
-    - xcode-archive@2.4.19:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-        - export_method: "$BITRISE_EXPORT_METHOD"
-        - configuration: Release
-    - deploy-to-bitrise-io@1.3.19: {}
   primary:
     steps:
-    - activate-ssh-key@4.0.3:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0.14: {}
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/bin/bash
+      - activate-ssh-key:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone: {}
+      - yarn: {}
+      - cocoapods-install:
+          inputs:
+            - podfile_path: ios/Podfile
+      - npm:
+          inputs:
+            - command: install -g detox-cli
+          title: Install Detox CLI
+      - npm:
+          inputs:
+            - command: install -g react-native-cli
+          title: Install React Native CLI
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
 
-            npm cache verify
+                detox build --configuration ios.sim.release
+          title: Detox - Build iOS
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
 
-            npm install
-        title: Install NPM Packages
-    - cocoapods-install@1.9.1:
-        inputs:
-        - podfile_path: ios/Podfile
-    - npm@1.0.1:
-        inputs:
-        - command: install -g detox-cli
-        title: Install Detox CLI
-    - npm@1.0.1:
-        inputs:
-        - command: install -g react-native-cli
-        title: Install React Native CLI
-    - script:
-        inputs:
-        - content: |-
-            #!/bin/bash
+                brew tap wix/brew
+                brew install applesimutils
+          title: Install Detox Utils
+      - script:
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                # fail if any commands fails
+                set -e
+                # debug log
+                set -x
 
-            brew tap wix/brew
-            brew install applesimutils
-        title: Install Detox Utils
-    - script:
-        inputs:
-        - content: |-
-            #!/bin/bash
+                detox test --configuration ios.sim.release --cleanup --take-screenshots all
+          title: Detox - Run ios E2E Tests
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
 
-            detox build --configuration ios.sim.release
-            detox build --configuration android.emu.release
-        title: Detox - Build Release App
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
+                detox build --configuration android.emu.release
+          title: Detox - Build Android
+          is_always_run: true
+      - avd-manager:
+          inputs:
+            - emulator_id: emulator-5554
+            - start_command_flags: "-camera-back none -camera-front none -no-boot-anim
+            -no-window"
+      - wait-for-android-emulator:
+          inputs:
+            - boot_timeout: '1600'
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
 
-            detox test --configuration ios.sim.release --cleanup --take-screenshots all
-        title: Detox - Run ios E2E Tests
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd $ANDROID_HOME
-
-            #rm -rf $ANDROID_HOME/emulator
-            #wget -q https://dl.google.com/android/repository/emulator-darwin-5346014.zip
-            #unzip -q emulator-darwin-5346014.zip
-            #ls -al $ANDROID_HOME/emulator
-
-            echo no | avdmanager create avd -n emulator-5554 -k "system-images;android-29;google_apis;x86" --force
-
-            cd -
-        title: Create android emulator
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd $ANDROID_HOME/emulator
-            ./emulator-headless -no-window -gpu swiftshader_indirect -no-audio -camera-back none -camera-front none @emulator-5554 > /dev/null 2>&1 &
-            cd -
-
-            echo "Waiting for Emulator"
-
-            bootanim=""
-            failcounter=0
-            timeout_in_sec=600
-
-            until [[ "$bootanim" =~ "stopped" ]]; do
-              bootanim=`adb -e shell getprop init.svc.bootanim 2>&1 &`
-              if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline" || "$bootanim" =~ "no emulators found"
-                || "$bootanim" =~ "running" ]]; then
-                let "failcounter += 1"
-                echo "Waiting for emulator to start"
-                if [[ $failcounter -gt timeout_in_sec ]]; then
-                  echo "Timeout ($timeout_in_sec seconds) reached; failed to start emulator"
-                  exit 1
-                fi
-              fi
-              sleep 1
-            done
-
-            echo "Emulator is ready"
-            sleep 60
-        title: Start android emulator
-    - script@1.1.5:
-        title: Log
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            adb -s emulator-5554 shell "dumpsys power"
-            adb logcat -d
-            avdmanager list
-    - script:
-        inputs:
-        - content: |-
-            #!/bin/bash
-
-            detox test --configuration android.emu.release.bitrise --cleanup --take-screenshots all
-        title: Detox - Run android E2E Tests
-    - deploy-to-bitrise-io@1.3.19:
-        inputs:
-        - is_compress: 'true'
-        - deploy_path: "$BITRISE_SOURCE_DIR/artifacts/"
-        is_always_run: false
-  android:
-    steps:
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            cd $ANDROID_HOME
-
-            rm -rf $ANDROID_HOME/emulator
-
-            wget -q https://dl.google.com/android/repository/emulator-linux-6203977.zip
-            unzip -q emulator-linux-6203977.zip
-
-            ls -al $ANDROID_HOME/emulator
-        title: Download canary version of emulator
-    - activate-ssh-key@4.0.3:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0.14: {}
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/bin/bash
-
-            npm cache verify
-
-            npm i
-            npm i detox@msand/detox-patch-build#07f01ce
-        title: Install NPM Packages
-    - npm@1.0.1:
-        inputs:
-        - command: install -g detox-cli
-        title: Install Detox CLI
-    - npm@1.0.1:
-        inputs:
-        - command: install -g react-native-cli
-        title: Install React Native CLI
-    - script@1.1.5:
-        inputs:
-        - content: |-
-            #!/bin/bash
-            detox build --configuration android.emu.release
-        title: Detox build
-    - script@1.1.5:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails \nset -e\n#
-            debug log\nset -x\n\ncd $ANDROID_HOME/emulator\n\necho no | avdmanager
-            create avd -n emulator-5554 -k \"system-images;android-28;google_apis;x86\"
-            --force\n\n./emulator-headless -no-window -gpu host -no-audio
-            -camera-back none -camera-front none @emulator-5554 -verbose -debug all
-            > /dev/null 2>&1 &\n\necho \"Waiting for Emulator\"\n\nbootanim=\"\"\nfailcounter=0\ntimeout_in_sec=120\n\nuntil
-            [[ \"$bootanim\" =~ \"stopped\" ]]; do\n  bootanim=`adb -e shell getprop
-            init.svc.bootanim 2>&1 &`\n  if [[ \"$bootanim\" =~ \"device not found\"
-            || \"$bootanim\" =~ \"device offline\" || \"$bootanim\" =~ \"no emulators
-            found\"\n    || \"$bootanim\" =~ \"running\" ]]; then\n    let \"failcounter
-            += 1\"\n    echo \"Waiting for emulator to start\"\n    if [[ $failcounter
-            -gt timeout_in_sec ]]; then\n      echo \"Timeout ($timeout_in_sec seconds)
-            reached; failed to start emulator\"\n      exit 1\n    fi\n  fi\n  sleep
-            1\ndone\n\nsleep 60\necho \"Emulator is ready\"\n"
-        title: Create and boot emulator
-    - script@1.1.5:
-        title: Detox test
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "Running test"
-            adb -s emulator-5554 shell "dumpsys power"
-            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/debug/app-debug.apk
-            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-            #adb logcat -d
-            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/release/app-release.apk
-            #adb -s emulator-5554 install -r -t /bitrise/src/android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk
-            #detox test --configuration android.emu.release --headless --loglevel trace || true
-            #detox test --configuration android.emu.release --headless --loglevel trace || true
-
-            detox test --configuration android.emu.release.bitrise --cleanup --headless --loglevel trace --take-screenshots all || true
-    - deploy-to-bitrise-io@1.3.19:
-        inputs:
-        - is_compress: 'true'
-        - deploy_path: "$BITRISE_SOURCE_DIR/artifacts/"
-        is_always_run: false
-    meta:
-      bitrise.io:
-        stack: linux-docker-android
+                detox test --configuration android.emu.release.bitrise --cleanup --take-screenshots all
+          title: Detox - Run android E2E Tests
+      - deploy-to-bitrise-io:
+          inputs:
+            - is_compress: 'true'
+            - deploy_path: "$BITRISE_SOURCE_DIR/artifacts/"
 app:
   envs:
-  - opts:
-      is_expand: false
-    PROJECT_LOCATION: android
-  - opts:
-      is_expand: false
-    MODULE: app
-  - opts:
-      is_expand: false
-    VARIANT: ''
-  - opts:
-      is_expand: false
-    BITRISE_PROJECT_PATH: ios/ReactNativeSvgE2E.xcodeproj
-  - opts:
-      is_expand: false
-    BITRISE_SCHEME: ReactNativeSvgE2E
-  - opts:
-      is_expand: false
-    BITRISE_EXPORT_METHOD: ad-hoc
+    - opts:
+        is_expand: false
+      PROJECT_LOCATION: android
+    - opts:
+        is_expand: false
+      MODULE: app
+    - opts:
+        is_expand: false
+      VARIANT: ''
+    - opts:
+        is_expand: false
+      BITRISE_PROJECT_PATH: ios/ReactNativeSvgE2E.xcodeproj
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: ReactNativeSvgE2E
+    - opts:
+        is_expand: false
+      BITRISE_EXPORT_METHOD: ad-hoc
 meta:
   bitrise.io:
     machine_type: performance
