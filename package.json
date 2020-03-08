@@ -22,7 +22,7 @@
     "screenshots:android:release": "detox test -c android.emu.release --take-screenshots all"
   },
   "dependencies": {
-    "jest-util": "24.9.0",
+    "jest-util": "25.1.0",
     "react": "16.13.0",
     "react-native": "0.61.5",
     "react-native-svg": "12.0.2"
@@ -31,10 +31,10 @@
     "@babel/core": "7.6.4",
     "@babel/runtime": "7.6.3",
     "@react-native-community/eslint-config": "0.0.7",
-    "babel-jest": "24.9.0",
+    "babel-jest": "25.1.0",
     "detox": "15.4.2",
     "eslint": "6.6.0",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "metro-react-native-babel-preset": "0.57.0",
     "react-test-renderer": "16.13.0"
   },
