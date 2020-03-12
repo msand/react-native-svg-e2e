@@ -20,7 +20,7 @@ while [[ -z ${LAUNCHER_READY} ]]; do
     ;;
     *"ConversationListActivity"*)
         echo "Detected ConversationListActivity, Dismissing..."
-        adb shell input keyevent KEYCODE_MENU
+        adb shell input keyevent KEYCODE_HOME
     ;;
     *"Not Responding"*)
         echo "Detected an ANR! Dismissing..."
