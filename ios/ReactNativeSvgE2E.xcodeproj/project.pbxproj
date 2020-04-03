@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0054D39D8F840A82E7F4F336 /* libPods-ReactNativeSvgE2ETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7373E0097186B777424F693D /* libPods-ReactNativeSvgE2ETests.a */; };
 		00E356F31AD99517003FC87E /* ReactNativeSvgE2ETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ReactNativeSvgE2ETests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
@@ -17,6 +16,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* ReactNativeSvgE2ETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ReactNativeSvgE2ETests.m */; };
+		561D9B92B2454334E5805C5A /* libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76108B656C03C25C3C6077EC /* libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a */; };
 		67E8DEB3AFF9090018DBEE1B /* libPods-ReactNativeSvgE2E-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37510C2E893E8F5A0E8063 /* libPods-ReactNativeSvgE2E-tvOS.a */; };
 		ADB0D517C9F77D5089E3AB3A /* libPods-ReactNativeSvgE2E.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08418CA2CCAF980ED14314DA /* libPods-ReactNativeSvgE2E.a */; };
 		C9BB5347FBC42697A016DEA6 /* libPods-ReactNativeSvgE2E-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC5718B3DE8906BBF3F4D02 /* libPods-ReactNativeSvgE2E-tvOSTests.a */; };
@@ -56,12 +56,14 @@
 		1E37510C2E893E8F5A0E8063 /* libPods-ReactNativeSvgE2E-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeSvgE2E-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* ReactNativeSvgE2E-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ReactNativeSvgE2E-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ReactNativeSvgE2E-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactNativeSvgE2E-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		35D68981A3E0E4BBE3E32096 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests/Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.debug.xcconfig"; sourceTree = "<group>"; };
 		6CA676FFC857EA5A6C797A13 /* Pods-ReactNativeSvgE2E-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2E-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2E-tvOSTests/Pods-ReactNativeSvgE2E-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		7373E0097186B777424F693D /* libPods-ReactNativeSvgE2ETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeSvgE2ETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73E82AC0E9FA9C42B95B9C09 /* Pods-ReactNativeSvgE2E-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2E-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2E-tvOSTests/Pods-ReactNativeSvgE2E-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		76108B656C03C25C3C6077EC /* libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8678AD70EF86F67EEC1E39FA /* Pods-ReactNativeSvgE2ETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2ETests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2ETests/Pods-ReactNativeSvgE2ETests.debug.xcconfig"; sourceTree = "<group>"; };
 		A5E0AB5C6DC74DF7FAB3B9D9 /* Pods-ReactNativeSvgE2E.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2E.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2E/Pods-ReactNativeSvgE2E.debug.xcconfig"; sourceTree = "<group>"; };
 		AFC5718B3DE8906BBF3F4D02 /* libPods-ReactNativeSvgE2E-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeSvgE2E-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEADBB9E7F1D2A52B0978BB9 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests/Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.release.xcconfig"; sourceTree = "<group>"; };
 		BFC8F65A81A09D5715F8F37D /* Pods-ReactNativeSvgE2ETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeSvgE2ETests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeSvgE2ETests/Pods-ReactNativeSvgE2ETests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -74,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0054D39D8F840A82E7F4F336 /* libPods-ReactNativeSvgE2ETests.a in Frameworks */,
+				561D9B92B2454334E5805C5A /* libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,7 +146,7 @@
 				08418CA2CCAF980ED14314DA /* libPods-ReactNativeSvgE2E.a */,
 				1E37510C2E893E8F5A0E8063 /* libPods-ReactNativeSvgE2E-tvOS.a */,
 				AFC5718B3DE8906BBF3F4D02 /* libPods-ReactNativeSvgE2E-tvOSTests.a */,
-				7373E0097186B777424F693D /* libPods-ReactNativeSvgE2ETests.a */,
+				76108B656C03C25C3C6077EC /* libPods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,8 +195,9 @@
 				6CA676FFC857EA5A6C797A13 /* Pods-ReactNativeSvgE2E-tvOSTests.release.xcconfig */,
 				8678AD70EF86F67EEC1E39FA /* Pods-ReactNativeSvgE2ETests.debug.xcconfig */,
 				BFC8F65A81A09D5715F8F37D /* Pods-ReactNativeSvgE2ETests.release.xcconfig */,
+				35D68981A3E0E4BBE3E32096 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.debug.xcconfig */,
+				BEADBB9E7F1D2A52B0978BB9 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -285,12 +288,14 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
-				ORGANIZATIONNAME = Facebook;
+				LastUpgradeCheck = 1140;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -305,7 +310,7 @@
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ReactNativeSvgE2E" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -410,7 +415,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ReactNativeSvgE2ETests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -580,8 +585,9 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8678AD70EF86F67EEC1E39FA /* Pods-ReactNativeSvgE2ETests.debug.xcconfig */;
+			baseConfigurationReference = 35D68981A3E0E4BBE3E32096 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -603,8 +609,9 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BFC8F65A81A09D5715F8F37D /* Pods-ReactNativeSvgE2ETests.release.xcconfig */;
+			baseConfigurationReference = BEADBB9E7F1D2A52B0978BB9 /* Pods-ReactNativeSvgE2E-ReactNativeSvgE2ETests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = ReactNativeSvgE2ETests/Info.plist;
@@ -625,9 +632,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A5E0AB5C6DC74DF7FAB3B9D9 /* Pods-ReactNativeSvgE2E.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"FB_SONARKIT_ENABLED=1",
+				);
 				INFOPLIST_FILE = ReactNativeSvgE2E/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -637,6 +650,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ReactNativeSvgE2E;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -645,7 +660,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 094CFAE44FDFC5350BDCA2C0 /* Pods-ReactNativeSvgE2E.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = ReactNativeSvgE2E/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -656,6 +673,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ReactNativeSvgE2E;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -774,6 +792,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -817,6 +836,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -827,6 +852,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -863,6 +889,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
