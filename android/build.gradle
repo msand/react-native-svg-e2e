@@ -39,7 +39,7 @@ allprojects {
         jcenter()
         maven { url 'https://www.jitpack.io' }
         maven {
-            url "$rootDir/../node_modules/detox/Detox-android"
+            url "$rootDir/../node_modules/detox/android"
         }
     }
 }

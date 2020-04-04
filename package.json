@@ -19,10 +19,13 @@
     "screenshots:ios": "detox test -c ios.sim.debug --take-screenshots all",
     "screenshots:android": "detox test -c android.emu.debug --take-screenshots all",
     "screenshots:ios:release": "detox test -c ios.sim.release --take-screenshots all",
-    "screenshots:android:release": "detox test -c android.emu.release --take-screenshots all"
+    "screenshots:android:release": "detox test -c android.emu.release --take-screenshots all",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "jest-util": "25.2.6",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "react": "16.11.0",
     "react-native": "0.62.1",
     "react-native-svg": "12.0.3"

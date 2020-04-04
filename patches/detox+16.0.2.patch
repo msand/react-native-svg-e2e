@@ -1,0 +1,158 @@
+diff --git a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DefaultIdleInterrogationStrategy.kt b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DefaultIdleInterrogationStrategy.kt
+index 51e8d2e..4878aa8 100644
+--- a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DefaultIdleInterrogationStrategy.kt
++++ b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DefaultIdleInterrogationStrategy.kt
+@@ -2,12 +2,14 @@
+ 
+ package com.wix.detox.reactnative.idlingresources.timers
+ 
++import android.util.Log
+ import com.facebook.react.bridge.NativeModule
+ import com.facebook.react.bridge.ReactContext
+ import com.wix.detox.common.RNDropSupportTodo
+ import org.joor.Reflect
+ import java.util.*
+ 
++private const val LOG_TAG = "DefaultTimingStrategy"
+ private const val BUSY_WINDOW_THRESHOLD = 1500
+ 
+ private class TimerReflected(timer: Any) {
+@@ -21,18 +23,18 @@ private class TimerReflected(timer: Any) {
+         get() = reflected.field("mTargetTime").get()
+ }
+ 
+-private class TimingModuleReflected(private val nativeModule: NativeModule) {
++private class TimingModuleReflected(private val timingModule: Any) {
+     val timersQueue: PriorityQueue<Any>
+-        get() = Reflect.on(nativeModule).field("mTimers").get()
++        get() = Reflect.on(timingModule).field("mTimers").get()
+     val timersLock: Any
+-        get() = Reflect.on(nativeModule).field("mTimerGuard").get()
++        get() = Reflect.on(timingModule).field("mTimerGuard").get()
+ 
+     operator fun component1() = timersQueue
+     operator fun component2() = timersLock
+ }
+ 
+ class DefaultIdleInterrogationStrategy
+-    internal constructor(private val timersModule: NativeModule)
++internal constructor(private val timersModule: Any)
+     : IdleInterrogationStrategy {
+ 
+     override fun isIdleNow(): Boolean {
+@@ -65,12 +67,33 @@ class DefaultIdleInterrogationStrategy
+     }
+ 
+     companion object {
+-        fun createIfSupported(reactContext: ReactContext): DefaultIdleInterrogationStrategy? =
++        fun createIfSupported(reactContext: ReactContext): DefaultIdleInterrogationStrategy? {
++            // RN = 0.62.0:
++            // Should have been handled by DelegatedIdleInterrogationStrategy.createIfSupported() but seems the new TimingModule class
++            // was released without the awaited-for "hasActiveTimersInRange()" method.
++            try {
++                val timingClass: Class<NativeModule> = Class.forName("com.facebook.react.modules.core.TimingModule") as Class<NativeModule>
++                if (!reactContext.hasNativeModule(timingClass)) {
++                    Log.d(LOG_TAG, "create(): new class - no native module")
++                    return null
++                }
++
++                val timingModule = reactContext.getNativeModule(timingClass)
++                val timersManager = Reflect.on(timingModule).get<Any>("mJavaTimerManager")
++                return DefaultIdleInterrogationStrategy(timersManager)
++            } catch (ex: Exception) {
++                Log.d(LOG_TAG, "create(): no new timing-module class implementation", ex)
++            }
++
++            // RN < 0.62
+             try {
+                 val timingClass: Class<NativeModule> = Class.forName("com.facebook.react.modules.core.Timing") as Class<NativeModule>
+-                DefaultIdleInterrogationStrategy(reactContext.getNativeModule(timingClass))
++                return DefaultIdleInterrogationStrategy(reactContext.getNativeModule(timingClass))
+             } catch (ex: Exception) {
+-                null
++                Log.d(LOG_TAG, "create(): no old timing-module class implementation", ex)
+             }
++
++            return null
++        }
+     }
+ }
+\ No newline at end of file
+diff --git a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DelegatedIdleInterrogationStrategy.kt b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DelegatedIdleInterrogationStrategy.kt
+index 6e5431b..3a47051 100644
+--- a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DelegatedIdleInterrogationStrategy.kt
++++ b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/DelegatedIdleInterrogationStrategy.kt
+@@ -1,10 +1,12 @@
+ package com.wix.detox.reactnative.idlingresources.timers
+ 
++import android.util.Log
+ import com.facebook.react.bridge.NativeModule
+ import com.facebook.react.bridge.ReactContext
+ import com.wix.detox.common.RNDropSupportTodo
+ import org.joor.Reflect
+ 
++private const val LOG_TAG = "DelegatedTimingStrategy"
+ private const val BUSY_WINDOW_THRESHOLD = 1500L
+ 
+ private class RN62TimingModuleReflected(private val timingModule: NativeModule) {
+@@ -32,16 +34,19 @@ class DelegatedIdleInterrogationStrategy(timingModule: NativeModule): IdleInterr
+             try {
+                 moduleClass = Class.forName("com.facebook.react.modules.core.TimingModule") as Class<NativeModule>
+             } catch (ex: Exception) {
++                Log.d(LOG_TAG, "create(): no class", ex)
+                 return null
+             }
+ 
+             if (!reactContext.hasNativeModule(moduleClass)) {
++                Log.d(LOG_TAG, "create(): no native module")
+                 return null
+             }
+ 
+             try {
+                 moduleClass.getDeclaredMethod("hasActiveTimersInRange", Long::class.java)
+             } catch (ex: Exception) {
++                Log.d(LOG_TAG, "create(): no dedicated idle-interrogation method", ex)
+                 return null
+             }
+ 
+diff --git a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/IdleInterrogationStrategy.kt b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/IdleInterrogationStrategy.kt
+index 9ae72d8..63fc0ad 100644
+--- a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/IdleInterrogationStrategy.kt
++++ b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/IdleInterrogationStrategy.kt
+@@ -16,6 +16,6 @@ fun getInterrogationStrategy(reactContext: ReactContext): IdleInterrogationStrat
+         return it
+     }
+ 
+-    Log.e(LOG_TAG, "Failed to determine proper implementation-strategy for timers idling resource")
++    Log.e(TimersIdlingResource.LOG_TAG, "Failed to determine proper implementation-strategy for timers idling resource")
+     return null
+ }
+\ No newline at end of file
+diff --git a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/TimersIdlingResource.kt b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/TimersIdlingResource.kt
+index cca694a..edbbafc 100644
+--- a/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/TimersIdlingResource.kt
++++ b/node_modules/detox/android/detox/src/main/java/com/wix/detox/reactnative/idlingresources/timers/TimersIdlingResource.kt
+@@ -4,12 +4,10 @@ import android.view.Choreographer
+ import androidx.test.espresso.IdlingResource
+ import java.util.concurrent.atomic.AtomicBoolean
+ 
+-const val LOG_TAG = "TimersIdlingResource"
+-
+ class TimersIdlingResource @JvmOverloads constructor(
+         private val interrogationStrategy: IdleInterrogationStrategy,
+         private val getChoreographer: () -> Choreographer = { Choreographer.getInstance() }
+-    ) : IdlingResource, Choreographer.FrameCallback {
++) : IdlingResource, Choreographer.FrameCallback {
+ 
+     private var callback: IdlingResource.ResourceCallback? = null
+     private var paused = AtomicBoolean(false)
+@@ -51,4 +49,8 @@ class TimersIdlingResource @JvmOverloads constructor(
+     }
+ 
+     private fun checkIdle() = interrogationStrategy.isIdleNow()
++
++    companion object {
++        const val LOG_TAG = "TimersIdlingResource"
++    }
+ }
+\ No newline at end of file
