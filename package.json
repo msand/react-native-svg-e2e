@@ -54,9 +54,9 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ReactNativeSvgE2E.app",
-        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -workspace ios/ReactNativeSvgE2E.xcworkspace -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,OS=11.4,name=iPhone X' -derivedDataPath ios/build | xcpretty",
+        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && xcodebuild -workspace ios/ReactNativeSvgE2E.xcworkspace -scheme ReactNativeSvgE2E -configuration Release -destination 'platform=iOS Simulator,OS=13.4,name=iPhone 11 Pro Max' -derivedDataPath ios/build | xcpretty",
         "type": "ios.simulator",
-        "name": "iPhone X"
+        "name": "iPhone 11 Pro Max"
       },
       "android.emu.debug": {
         "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
