@@ -23,7 +23,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "jest-util": "25.2.6",
+    "jest-util": "25.5.0",
     "patch-package": "6.2.2",
     "postinstall-postinstall": "2.1.0",
     "react": "16.11.0",
