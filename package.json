@@ -28,7 +28,7 @@
     "postinstall-postinstall": "2.1.0",
     "react": "16.11.0",
     "react-native": "0.62.1",
-    "react-native-svg": "12.1.0"
+    "react-native-svg": "12.5.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
